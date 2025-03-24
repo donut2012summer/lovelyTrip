@@ -1,24 +1,26 @@
 package com.vic.lovelytrip.dto;
 
-import com.vic.lovelytrip.lib.MessageCodeEnum;
+import com.vic.lovelytrip.lib.MessageContainer;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
+@Getter
+@Setter
 public abstract class BaseDto {
 
     private long id;
 
+    @CreatedDate
     private LocalDateTime createTime;
 
+    @LastModifiedDate
     private LocalDateTime updateTime;
 
-    private List<MessageCodeEnum> messageContainer;
-
-    public static void main(String[] args) {
-
-    }
+    private MessageContainer messageContainer;
 
 }

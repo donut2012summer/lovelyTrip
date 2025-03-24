@@ -1,12 +1,13 @@
 package com.vic.lovelytrip.entity;
 
-import com.vic.lovelytrip.lib.MessageCodeEnum;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "trip")
 public class TripEntity extends BaseEntity {

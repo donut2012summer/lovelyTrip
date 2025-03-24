@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 @Data
 public class MessageContainer {
 
-    Map<String, String> messageContainer;
+    private Map<String, String> messageContainer;
 
-    MessageContainer(){
+    public MessageContainer(){
         this.messageContainer = new HashMap<>();
     }
 
@@ -45,5 +45,8 @@ public class MessageContainer {
         return MessageFormat.format(messageCodeEnum.getMessage(), concatedFieldName);
     }
 
+    public int size(){
+        return this.messageContainer.size();
+    }
 
 }
