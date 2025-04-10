@@ -2,7 +2,7 @@ package com.vic.lovelytrip.mapper;
 
 import com.vic.lovelytrip.dto.BaseDto;
 import com.vic.lovelytrip.entity.BaseEntity;
-import com.vic.lovelytrip.lib.MessageContainer;
+import com.vic.lovelytrip.lib.MessageInfoContainer;
 
 public abstract class BaseMapper {
 
@@ -10,6 +10,6 @@ public abstract class BaseMapper {
     abstract BaseEntity mapToEntity(BaseDto baseDto);
 
     // to dto
-    abstract BaseDto mapToDto(BaseEntity baseEntity, MessageContainer messageContainer);
+    abstract BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer);
 
 }

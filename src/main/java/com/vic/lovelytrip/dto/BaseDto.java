@@ -1,26 +1,23 @@
 package com.vic.lovelytrip.dto;
 
-import com.vic.lovelytrip.lib.MessageContainer;
+import com.vic.lovelytrip.lib.MessageInfoContainer;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
-@Getter
-@Setter
+@Data
 public abstract class BaseDto {
 
     private long id;
 
     @CreatedDate
-    private LocalDateTime createTime;
+    private OffsetDateTime createdTime;
 
     @LastModifiedDate
-    private LocalDateTime updateTime;
+    private OffsetDateTime updatedTime;
 
-    private MessageContainer messageContainer;
+    private MessageInfoContainer messageInfoContainer;
 
 }

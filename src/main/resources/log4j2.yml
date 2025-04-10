@@ -1,0 +1,50 @@
+Configuration:
+  # status: trace
+
+  Appenders:
+    Console:
+      name: ConsoleAppender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}.%M():%L - %m%n"
+
+    File:
+      name: ServiceFileAppender
+      fileName: logs/service.log
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}.%M():%L - %m%n"
+
+    RollingFile:
+      name: RepoFileAppender
+      fileName: logs/repo.log
+      filePattern: logs/repo-%d{yyyy-MM-dd}-%i.log.gz
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}.%M():%L - %m%n"
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: 10MB
+
+  Loggers:
+    Logger:
+      - name: com.vic.lovelytrip.service
+        level: debug
+        additivity: false
+        includeLocation: true
+        AppenderRef:
+          - ref: ConsoleAppender
+          - ref: ServiceFileAppender
+
+      - name: com.vic.lovelytrip.repository
+        level: info
+        additivity: false
+        includeLocation: true
+        AppenderRef:
+          - ref: RepoFileAppender
+
+    Root:
+      level: info
+      includeLocation: true
+      AppenderRef:
+        - ref: ConsoleAppender

@@ -1,6 +1,6 @@
 package com.vic.lovelytrip.aspect;
 
-import com.vic.lovelytrip.dto.RestServiceResponse;
+import com.vic.lovelytrip.dto.restservice.RestServiceResponse;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ControllerAspect {
 
-    @Around("PointCuts.allControllerMethods() && PointCuts.restControllerMethods()")
+//    @Around("PointCuts.allControllerMethods() && PointCuts.restControllerMethods()")
     public <T> RestServiceResponse<T> wrapResultToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
 
         @SuppressWarnings("unchecked")

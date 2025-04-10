@@ -1,19 +1,17 @@
 package com.vic.lovelytrip.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @MappedSuperclass
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) // for unit test
 @EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
+@Data
 public abstract class BaseEntity {
 
     @Id
@@ -21,8 +19,12 @@ public abstract class BaseEntity {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @CreatedDate // jpa generated the time when the obj is persisted
-    @Column (updatable = false)
-    private LocalDateTime createAt;
+//    @CreatedDate // jpa generated the time when the obj is persisted
+    @Column (insertable = false, updatable = false)
+    private OffsetDateTime createdTime;
+
+//    @LastModifiedDate
+    @Column (insertable = false, updatable = false)
+    private OffsetDateTime updatedTime;
 
 }

@@ -1,23 +1,18 @@
 package com.vic.lovelytrip.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
 @Table(name = "trip")
+@Data
 public class TripEntity extends BaseEntity {
 
     private String title;
-
     private String description;
-
     private String destination;
-
     private int duration;
+    // FK in DB, no orm in java
+    private long supplierId;
 
 }

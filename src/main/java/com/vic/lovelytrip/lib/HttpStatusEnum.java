@@ -15,7 +15,6 @@ public enum HttpStatusEnum {
     SERVICE_UNAVAILABLE(503, "Service Unavailable");
 
     private int statusCode;
-
     private String statusMessage;
 
     HttpStatusEnum(int statusCode, String statusMessage) {
