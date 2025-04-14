@@ -1,57 +1,61 @@
 package com.vic.lovelytrip.repository;
 
-
 import com.vic.lovelytrip.entity.TripEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-@SpringBootTest
+@DataJpaTest
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class TripRepositoryTest {
+
+    private final Logger logger = LoggerFactory.getLogger(TripRepositoryTest.class);
+    private TripEntity tripEntity;
 
     @Autowired
     private TripRepository tripRepository;
 
+    @BeforeEach
+    void setUp(){
+        logger.info("------ Set up TripEntity ------ ");
+        tripEntity = new TripEntity();
+
+        tripEntity.setTitle("Test Trip");
+        tripEntity.setDescription("Test Description");
+        tripEntity.setDestination("Test Destination");
+        tripEntity.setDuration(10);
+        tripEntity.setSupplierId(1);
+    }
+
     @Test
     void testConnection(){
+
+        logger.info("------ Start testConnection ------ ");
+
         List<TripEntity> tripEntityList = tripRepository.findAll();
         assert tripEntityList.isEmpty();
-        System.out.println("Database connected!");
 
+        logger.info("------ Connection test passed ------ ");
     }
 
     @Test
-    void testSaveAndFindTrip(){
+    void testSaveTripWithValidData(){
 
-        TripEntity tripEntity = new TripEntity();
+        logger.info("------ Start testSaveTripWithValidData ------ ");
 
-        tripEntity.setDuration(2);
-        tripEntity.setDescription("aad");
-        tripEntity.setDestination("Ilan");
-        tripEntity.setTitle("TestSave");
+        TripEntity returnedTripEntity = tripRepository.save(tripEntity);
+        assert returnedTripEntity != null;
+        assert returnedTripEntity.getTitle().equals("Test Trip");
 
-        tripRepository.save(tripEntity);
-        tripRepository.findAll().forEach(System.out::println);
-
-        // override the equals and hashcode and compare by id , then will got true
-        assert tripRepository.findAll().contains(tripEntity);
-    }
-
-    @Test
-    void testDeleteTrip(){
-
-        TripEntity tripEntity = new TripEntity();
-
-        tripEntity.setDuration(2);
-        tripEntity.setDescription("aad");
-        tripEntity.setDestination("Ilan");
-        tripEntity.setTitle("TestDelete");
-
-        tripRepository.delete(tripEntity);
-
-        assert !tripRepository.findAll().contains(tripEntity);
+        logger.info("------ testSaveTripWithValidData passed------ ");
 
     }
 

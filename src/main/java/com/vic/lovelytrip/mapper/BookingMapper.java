@@ -10,13 +10,11 @@ public class BookingMapper extends BaseMapper {
 
     @Override
     BaseEntity mapToEntity(BaseDto baseDto) {
-        // convert baseDto to BookingDto
+
         BookingDto bookingDto = (BookingDto) baseDto;
 
-        // new Booking Entity
         BookingEntity bookingEntity = new BookingEntity();
 
-        // set data
         bookingEntity.setUserId(bookingDto.getUserId());
         bookingEntity.setTourGroupId(bookingDto.getTourGroupId());
         bookingEntity.setParticipantCount(bookingDto.getParticipantCount());
@@ -32,13 +30,9 @@ public class BookingMapper extends BaseMapper {
 
     @Override
     BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
-        // convert baseEntity to bookingEntity
+
         BookingEntity bookingEntity = (BookingEntity) baseEntity;
-
-
-        // new a bookingDto
         BookingDto bookingDto = new BookingDto();
-        // set data + id + time stamp + messageInfoContainer
 
         bookingDto.setUserId(bookingEntity.getUserId());
         bookingDto.setTourGroupId(bookingEntity.getTourGroupId());

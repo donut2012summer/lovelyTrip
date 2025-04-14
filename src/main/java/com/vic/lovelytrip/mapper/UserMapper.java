@@ -7,14 +7,13 @@ import com.vic.lovelytrip.entity.UserEntity;
 import com.vic.lovelytrip.lib.MessageInfoContainer;
 
 public class UserMapper extends BaseMapper{
+
     @Override
     BaseEntity mapToEntity(BaseDto baseDto) {
 
-        // convert baseDto to UserDto
         UserDto userDto = new UserDto();
-        // new a baseEntity
         UserEntity userEntity = new UserEntity();
-        // set data
+
         userEntity.setFirstName(userDto.getFirstName());
         userEntity.setLastName(userDto.getLastName());
         userEntity.setEmail(userDto.getEmail());
@@ -30,12 +29,9 @@ public class UserMapper extends BaseMapper{
     @Override
     BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
 
-        // convert baseEntity to userEntity
         UserEntity userEntity = (UserEntity) baseEntity;
-
-        // new a userDto
         UserDto userDto = new UserDto();
-        // set data + timestamp , container
+
         userDto.setFirstName(userEntity.getFirstName());
         userDto.setLastName(userEntity.getLastName());
         userDto.setEmail(userEntity.getEmail());
@@ -45,6 +41,7 @@ public class UserMapper extends BaseMapper{
         userDto.setUserRole(userEntity.getUserRole());
         userDto.setStatus(userEntity.getStatus());
 
+        userDto.setId(userEntity.getId());
         userDto.setCreatedTime(userEntity.getCreatedTime());
         userDto.setUpdatedTime(userEntity.getUpdatedTime());
         userDto.setMessageInfoContainer(messageInfoContainer);

@@ -5,6 +5,7 @@ import com.vic.lovelytrip.entity.TripEntity;
 import com.vic.lovelytrip.lib.MessageCodeEnum;
 import com.vic.lovelytrip.lib.MessageInfoContainer;
 import com.vic.lovelytrip.repository.SupplierRepository;
+import com.vic.lovelytrip.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class TripValidator extends BaseValidator {
 
     private SupplierRepository supplierRepository;
+
 
     @Autowired
     public TripValidator(SupplierRepository supplierRepository) {
@@ -28,13 +30,13 @@ public class TripValidator extends BaseValidator {
 
         TripEntity tripEntity = (TripEntity) entity;
 
-        messageInfoContainer = validateSupplier(tripEntity.getSupplierId(), messageInfoContainer);
+        boolean isValidSupplier = validateSupplier(tripEntity.getSupplierId(), messageInfoContainer);
 
-        if (messageInfoContainer.size() > 0) {
+        if (!isValidSupplier) {
             return messageInfoContainer;
         }
 
-        return validateRequiredFields(tripEntity, messageInfoContainer);
+        return checkRequiredFields(tripEntity, messageInfoContainer);
     }
 
     /**
@@ -44,15 +46,22 @@ public class TripValidator extends BaseValidator {
      * @return MessageInfoContainer
      * @remark
      * */
-    protected MessageInfoContainer validateSupplier(long supplierId, MessageInfoContainer messageInfoContainer) {
+    protected boolean validateSupplier(long supplierId, MessageInfoContainer messageInfoContainer) {
 
-        Boolean isNotBlank = validatedNotBlank("trip.supplierId", supplierId, messageInfoContainer);
+        boolean isBlankId = !validateNotBlank("trip.supplierId", supplierId, messageInfoContainer);
 
-        if( isNotBlank && !supplierRepository.existsById(supplierId)){
-            messageInfoContainer.addMessage(MessageCodeEnum.SUPPLIER_NOT_FOUND);
+        if (isBlankId) {
+            return false;
         }
-        return messageInfoContainer;
+
+        if(supplierRepository.existsById(supplierId)){
+            return true;
+        }
+
+        messageInfoContainer.addMessage(MessageCodeEnum.DATA_NOT_FOUND, "Supplier");
+        return false;
     }
+
     /**
      * Validate the required fields in tripEntity, add messages in the super message container if they are empty
      *
@@ -60,11 +69,12 @@ public class TripValidator extends BaseValidator {
      * @return
      * @remark
      * */
-    private MessageInfoContainer validateRequiredFields(TripEntity tripEntity, MessageInfoContainer messageInfoContainer) {
-        validatedNotBlank("trip.title", tripEntity.getTitle(), messageInfoContainer);
-        validatedNotBlank("trip.description", tripEntity.getDescription(), messageInfoContainer);
-        validatedNotBlank("trip.destination", tripEntity.getDestination(), messageInfoContainer);
-        validatedNotBlank("trip.duration", tripEntity.getDuration(), messageInfoContainer);
+    private MessageInfoContainer checkRequiredFields(TripEntity tripEntity, MessageInfoContainer messageInfoContainer) {
+        validateNotBlank("trip.title", tripEntity.getTitle(), messageInfoContainer);
+        validateNotBlank("trip.description", tripEntity.getDescription(), messageInfoContainer);
+        validateNotBlank("trip.destination", tripEntity.getDestination(), messageInfoContainer);
+        validateNotBlank("trip.duration", tripEntity.getDuration(), messageInfoContainer);
+
         return messageInfoContainer;
     }
 

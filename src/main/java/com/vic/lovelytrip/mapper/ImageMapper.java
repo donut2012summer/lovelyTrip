@@ -8,15 +8,13 @@ import com.vic.lovelytrip.entity.ImageEntity;
 import com.vic.lovelytrip.lib.MessageInfoContainer;
 
 public class ImageMapper extends BaseMapper {
+
     @Override
     BaseEntity mapToEntity(BaseDto baseDto) {
 
-        // convert baseDto to ImageDto
         ImageDto imageDto = (ImageDto) baseDto;
-        // new a imageEntity
-
         ImageEntity imageEntity = new ImageEntity();
-        // set data
+
         imageEntity.setReference_table(imageDto.getReference_table());
         imageEntity.setReference_id(imageDto.getReference_id());
         imageEntity.setImageUrl(imageDto.getImageUrl());
@@ -29,13 +27,9 @@ public class ImageMapper extends BaseMapper {
     @Override
     BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
 
-        // convert baseEntity to imageEntity
         ImageEntity imageEntity = (ImageEntity) baseEntity;
-
-        // new a imageDto
         ImageDto imageDto = new ImageDto();
 
-        // set data + id, timestamp and messageInfoContainer
         imageDto.setReference_table(imageEntity.getReference_table());
         imageDto.setReference_id(imageEntity.getReference_id());
         imageDto.setImageUrl(imageEntity.getImageUrl());

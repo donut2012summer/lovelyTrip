@@ -10,11 +10,9 @@ public class TourGroupMapper extends BaseMapper{
     @Override
     BaseEntity mapToEntity(BaseDto baseDto) {
 
-        // convert baseDto to tourgroupdto
         TourGroupDto tourGroupDto = (TourGroupDto) baseDto;
-        // new a entity
         TourGroupEntity tourGroupEntity = new TourGroupEntity();
-        // set data
+
         tourGroupEntity.setTripId(tourGroupDto.getTripId());
         tourGroupEntity.setTitle(tourGroupDto.getTitle());
         tourGroupEntity.setDescription(tourGroupDto.getDescription());
@@ -30,11 +28,9 @@ public class TourGroupMapper extends BaseMapper{
     @Override
     BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
 
-        // convert baseEntity to tourgroupentity
         TourGroupEntity tourGroupEntity = (TourGroupEntity) baseEntity;
-        // new a tourgroupdto
         TourGroupDto tourGroupDto = new TourGroupDto();
-        // set data + id, timestamp container
+
         tourGroupDto.setTripId(tourGroupEntity.getTripId());
         tourGroupDto.setTitle(tourGroupEntity.getTitle());
         tourGroupDto.setDescription(tourGroupEntity.getDescription());

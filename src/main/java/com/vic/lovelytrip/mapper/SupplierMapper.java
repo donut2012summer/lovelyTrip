@@ -10,11 +10,9 @@ public class SupplierMapper extends BaseMapper{
     @Override
     BaseEntity mapToEntity(BaseDto baseDto) {
 
-        // convert baseDto to supplierDto
         SupplierDto supplierDto = (SupplierDto) baseDto;
-        // new a supplierEntity
         SupplierEntity supplierEntity = new SupplierEntity();
-        // set data
+
         supplierEntity.setCompanyName(supplierDto.getCompanyName());
         supplierEntity.setLicenseNo(supplierDto.getLicenseNo());
         supplierEntity.setContactName(supplierDto.getContactName());
@@ -27,11 +25,9 @@ public class SupplierMapper extends BaseMapper{
 
     @Override
     BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
-        // convert baseEntity to supplierEntity
+
         SupplierEntity supplierEntity = (SupplierEntity) baseEntity;
-        // new a supplierDto
         SupplierDto supplierDto = new SupplierDto();
-        // set data + time stamp + container
 
         supplierDto.setCompanyName(supplierEntity.getCompanyName());
         supplierDto.setLicenseNo(supplierEntity.getLicenseNo());
@@ -40,6 +36,7 @@ public class SupplierMapper extends BaseMapper{
         supplierDto.setPhone(supplierEntity.getPhone());
         supplierDto.setStatus(supplierEntity.getStatus());
 
+        supplierDto.setId(supplierEntity.getId());
         supplierDto.setCreatedTime(supplierEntity.getCreatedTime());
         supplierDto.setUpdatedTime(supplierEntity.getUpdatedTime());
         supplierDto.setMessageInfoContainer(messageInfoContainer);

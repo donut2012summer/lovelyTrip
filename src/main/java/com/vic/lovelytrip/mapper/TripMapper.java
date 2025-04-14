@@ -29,19 +29,29 @@ public class TripMapper extends BaseMapper {
     @Override
     public BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
 
+        TripDto tripDto = new TripDto();
+        tripDto.setMessageInfoContainer(messageInfoContainer);
+
+        if ( null == baseEntity ) {
+            return tripDto;
+        }
+
         TripEntity tripEntity = (TripEntity) baseEntity;
 
-        TripDto tripDto = new TripDto();
+        // check not null area
+        if( null != tripEntity.getId()){
 
-        tripDto.setTitle(tripEntity.getTitle());
-        tripDto.setDescription(tripEntity.getDescription());
-        tripDto.setDestination(tripEntity.getDestination());
-        tripDto.setDuration(tripEntity.getDuration());
-        tripDto.setSupplierId(tripEntity.getSupplierId());
+            tripDto.setTitle(tripEntity.getTitle());
+            tripDto.setDescription(tripEntity.getDescription());
+            tripDto.setDestination(tripEntity.getDestination());
+            tripDto.setDuration(tripEntity.getDuration());
+            tripDto.setSupplierId(tripEntity.getSupplierId());
 
-        tripDto.setCreatedTime(tripEntity.getCreatedTime());
-        tripDto.setUpdatedTime(tripEntity.getUpdatedTime());
-        tripDto.setMessageInfoContainer(messageInfoContainer);
+            tripDto.setId(tripEntity.getId());
+            tripDto.setCreatedTime(tripEntity.getCreatedTime());
+            tripDto.setUpdatedTime(tripEntity.getUpdatedTime());
+        }
+        // check null area 
 
         return tripDto;
     }

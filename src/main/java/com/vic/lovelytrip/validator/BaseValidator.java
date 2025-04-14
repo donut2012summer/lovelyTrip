@@ -28,9 +28,9 @@ public abstract class BaseValidator {
      * @return true if the entity data is not blank
      * @remark
      * */
-    protected Boolean validatedNotBlank(String fieldName, Object value, MessageInfoContainer messageInfoContainer) {
+    public boolean validateNotBlank(String fieldName, Object value, MessageInfoContainer messageInfoContainer) {
 
-        Boolean isBlank = isBlankField(value);
+        boolean isBlank = isBlankField(value);
 
         if(isBlank){
             messageInfoContainer.addMessage(MessageCodeEnum.REQUIRE_NOT_BLANK, fieldName);
@@ -50,7 +50,7 @@ public abstract class BaseValidator {
      * */
     protected void checkFormat(String fieldName, Object value, PatternEnum patternEnum, MessageInfoContainer messageInfoContainer) {
 
-        if(validatedNotBlank(fieldName, value, messageInfoContainer) && !patternEnum.matches(value.toString())){
+        if(validateNotBlank(fieldName, value, messageInfoContainer) && !patternEnum.matches(value.toString())){
             messageInfoContainer.addMessage(MessageCodeEnum.INVALID_FORMAT, fieldName);
         }
 
