@@ -5,8 +5,15 @@ import com.vic.lovelytrip.dto.TourGroupDto;
 import com.vic.lovelytrip.entity.BaseEntity;
 import com.vic.lovelytrip.entity.TourGroupEntity;
 import com.vic.lovelytrip.lib.MessageInfoContainer;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Component
 public class TourGroupMapper extends BaseMapper{
+
     @Override
     BaseEntity mapToEntity(BaseDto baseDto) {
 
@@ -29,8 +36,34 @@ public class TourGroupMapper extends BaseMapper{
     BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
 
         TourGroupEntity tourGroupEntity = (TourGroupEntity) baseEntity;
-        TourGroupDto tourGroupDto = new TourGroupDto();
 
+        TourGroupDto tourGroupDto = new TourGroupDto();
+        tourGroupDto.setMessageInfoContainer(messageInfoContainer);
+
+        if (null != tourGroupEntity.getId()){
+            tourGroupDto = generateDto(tourGroupEntity);
+        }
+
+        return tourGroupDto;
+    }
+
+    public List<TourGroupDto> batchMapToDto(List<TourGroupEntity> tourGroupEntityList){
+
+        List<TourGroupDto> tourGroupDtoList = new ArrayList<>();
+
+        if (null == tourGroupEntityList || tourGroupEntityList.isEmpty()){
+            return tourGroupDtoList;
+        }
+
+        for (TourGroupEntity tourGroupEntity : tourGroupEntityList){
+            tourGroupDtoList.add(generateDto(tourGroupEntity));
+        }
+        return tourGroupDtoList;
+    }
+
+    private TourGroupDto generateDto(TourGroupEntity tourGroupEntity) {
+
+        TourGroupDto tourGroupDto = new TourGroupDto();
         tourGroupDto.setTripId(tourGroupEntity.getTripId());
         tourGroupDto.setTitle(tourGroupEntity.getTitle());
         tourGroupDto.setDescription(tourGroupEntity.getDescription());
@@ -43,8 +76,9 @@ public class TourGroupMapper extends BaseMapper{
         tourGroupDto.setId(tourGroupEntity.getId());
         tourGroupDto.setCreatedTime(tourGroupEntity.getCreatedTime());
         tourGroupDto.setUpdatedTime(tourGroupEntity.getUpdatedTime());
-        tourGroupDto.setMessageInfoContainer(messageInfoContainer);
 
         return tourGroupDto;
-    }
+    };
+
+
 }

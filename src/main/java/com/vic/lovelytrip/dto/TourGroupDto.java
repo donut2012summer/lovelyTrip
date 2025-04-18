@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class TourGroupDto extends BaseDto{
+
     private long tripId; // FK in DB
     private String title;
     private String description;

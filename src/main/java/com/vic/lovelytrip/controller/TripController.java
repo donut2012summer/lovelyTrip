@@ -8,30 +8,32 @@ import com.vic.lovelytrip.mapper.TripMapper;
 import com.vic.lovelytrip.service.TripService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/trips")
 public class TripController {
 
     private TripService tripService;
+
     private TripMapper tripMapper;
 
     @Autowired
-    TripController(TripService tripService) {
+    TripController(TripService tripService, TripMapper tripMapper) {
         this.tripService = tripService;
-        this.tripMapper = new TripMapper();
+        this.tripMapper = tripMapper;
     }
 
-    @GetMapping("trips/{id}")
-    RestServiceResponse<BaseDto> getTripByTripId(@RequestBody RestServiceRequest<TripDto> restServiceRequest) {
-        return null;
+    @GetMapping("{tripId}")
+    RestServiceResponse<BaseDto> getTripByTripId(
+              @PathVariable long tripId
+            , @RequestParam(name="includeTourGroups", defaultValue = "false") boolean includeTourGroups) {
+
+        return toResponse(tripService.getTripById(tripId, includeTourGroups));
     }
 
 
-    @PostMapping("/trips")
+    @PostMapping
     RestServiceResponse<BaseDto> saveTrip(@RequestBody RestServiceRequest<TripDto> restServiceRequest) {
         return toResponse(tripService.saveTrip(tripMapper.mapToEntity(restServiceRequest.getBody())));
     }

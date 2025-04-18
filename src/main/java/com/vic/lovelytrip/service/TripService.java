@@ -7,6 +7,6 @@ public interface TripService {
 
     BaseDto saveTrip(BaseEntity trip);
 
-    BaseDto getTripById(Long id);
+    BaseDto getTripById(Long id, boolean includeTourGroups);
 
 }
