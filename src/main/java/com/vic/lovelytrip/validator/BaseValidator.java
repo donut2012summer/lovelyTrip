@@ -1,6 +1,7 @@
 package com.vic.lovelytrip.validator;
 
 import com.vic.lovelytrip.entity.BaseEntity;
+import com.vic.lovelytrip.lib.HttpStatusEnum;
 import com.vic.lovelytrip.lib.MessageInfoContainer;
 import com.vic.lovelytrip.lib.MessageCodeEnum;
 import com.vic.lovelytrip.lib.PatternEnum;
@@ -12,30 +13,22 @@ import java.util.Objects;
 public abstract class BaseValidator {
 
     /**
-     * validate the entities, implemented by each validator
-     *
-     * @param baseEntity entity that need to be validated
-     * @return
-     * @remark
-     * */
-    abstract MessageInfoContainer validate(BaseEntity baseEntity);
-
-    /**
-     * Check field value and add message when it is empty
+     * Add error message if the field value is empty or null
      *
      * @param fieldName
      * @param value
-     * @return true if the entity data is not blank
+     * @return
      * @remark
      * */
-    public boolean validateNotBlank(String fieldName, Object value, MessageInfoContainer messageInfoContainer) {
+    protected boolean addMessageWhenFieldBlank(String fieldName, Object value, MessageInfoContainer messageInfoContainer) {
 
         boolean isBlank = isBlankField(value);
 
         if(isBlank){
             messageInfoContainer.addMessage(MessageCodeEnum.REQUIRE_NOT_BLANK, fieldName);
+            return true;
         }
-        return !isBlank;
+        return false;
     }
 
 
@@ -50,7 +43,27 @@ public abstract class BaseValidator {
      * */
     protected void checkFormat(String fieldName, Object value, PatternEnum patternEnum, MessageInfoContainer messageInfoContainer) {
 
-        if(validateNotBlank(fieldName, value, messageInfoContainer) && !patternEnum.matches(value.toString())){
+        addMessageWhenFieldBlank(fieldName, value, messageInfoContainer);
+
+        if(messageInfoContainer.containsErrors()) {
+            return;
+        }
+
+        if(!patternEnum.matches(value.toString())){
+            messageInfoContainer.addMessage(MessageCodeEnum.INVALID_FORMAT, fieldName);
+        }
+
+    }
+
+    protected void checkIdFormat(String fieldName, Long id, MessageInfoContainer messageInfoContainer) {
+
+        addMessageWhenFieldBlank(fieldName, id, messageInfoContainer);
+
+        if(messageInfoContainer.containsErrors()) {
+            return;
+        }
+
+        if(id <= 0){
             messageInfoContainer.addMessage(MessageCodeEnum.INVALID_FORMAT, fieldName);
         }
 

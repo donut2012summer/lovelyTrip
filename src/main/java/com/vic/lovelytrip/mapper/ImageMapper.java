@@ -1,46 +1,63 @@
 package com.vic.lovelytrip.mapper;
 
 
-import com.vic.lovelytrip.dto.BaseDto;
-import com.vic.lovelytrip.dto.ImageDto;
-import com.vic.lovelytrip.entity.BaseEntity;
+import com.vic.lovelytrip.dto.ImageCreateRequest;
+import com.vic.lovelytrip.dto.ImageDetail;
 import com.vic.lovelytrip.entity.ImageEntity;
+import com.vic.lovelytrip.lib.BusinessException;
+import com.vic.lovelytrip.lib.HttpStatusEnum;
 import com.vic.lovelytrip.lib.MessageInfoContainer;
 
-public class ImageMapper extends BaseMapper {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-    @Override
-    BaseEntity mapToEntity(BaseDto baseDto) {
+public class ImageMapper{
 
-        ImageDto imageDto = (ImageDto) baseDto;
+
+    ImageEntity mapToEntity(ImageCreateRequest imageCreateRequest) {
         ImageEntity imageEntity = new ImageEntity();
 
-        imageEntity.setReference_table(imageDto.getReference_table());
-        imageEntity.setReference_id(imageDto.getReference_id());
-        imageEntity.setImageUrl(imageDto.getImageUrl());
-        imageEntity.setImageZone(imageDto.getImageZone());
-        imageEntity.setDisplayOrder(imageDto.getDisplayOrder());
+        imageEntity.setImageUrl(imageCreateRequest.getImageUrl());
+        imageEntity.setImageZone(imageCreateRequest.getImageZone());
+        imageEntity.setDisplayOrder(imageCreateRequest.getDisplayOrder());
 
         return imageEntity;
+
     }
 
-    @Override
-    BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
+    public List<ImageEntity> batchMapToEntity(List<ImageCreateRequest> imageCreateRequestList){
 
-        ImageEntity imageEntity = (ImageEntity) baseEntity;
-        ImageDto imageDto = new ImageDto();
+        return Optional.ofNullable(imageCreateRequestList)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new IllegalArgumentException("ImageList cannot be null or empty!"))
+                .stream()
+                .map(this::mapToEntity)
+                .collect(Collectors.toList());
 
-        imageDto.setReference_table(imageEntity.getReference_table());
-        imageDto.setReference_id(imageEntity.getReference_id());
-        imageDto.setImageUrl(imageEntity.getImageUrl());
-        imageDto.setImageZone(imageEntity.getImageZone());
-        imageDto.setDisplayOrder(imageEntity.getDisplayOrder());
-
-        imageDto.setId(imageEntity.getId());
-        imageDto.setCreatedTime(imageEntity.getCreatedTime());
-        imageDto.setUpdatedTime(imageEntity.getUpdatedTime());
-        imageDto.setMessageInfoContainer(messageInfoContainer);
-
-        return imageDto;
     }
+    public ImageDetail mapToImageDetail(ImageEntity imageEntity) {
+        ImageDetail imageDetail = new ImageDetail();
+
+        imageDetail.setId(imageEntity.getId());
+        imageDetail.setImageUrl(imageEntity.getImageUrl());
+        imageDetail.setImageZone(imageEntity.getImageZone());
+        imageDetail.setDisplayOrder(imageEntity.getDisplayOrder());
+
+        return imageDetail;
+    }
+
+    public List<ImageDetail> batchMapToImageDetail(List<ImageEntity> imageEntityList) {
+        List<ImageDetail> imageDetailList = new ArrayList<>();
+
+        if (imageEntityList != null && !imageEntityList.isEmpty()) {
+            for (ImageEntity imageEntity : imageEntityList) {
+                imageDetailList.add(mapToImageDetail(imageEntity));
+            }
+        }
+
+        return imageDetailList;
+    }
+
 }

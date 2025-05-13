@@ -7,7 +7,6 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-@Entity
 @Table(name = "user")
 @Data
 public class UserEntity extends BaseEntity{

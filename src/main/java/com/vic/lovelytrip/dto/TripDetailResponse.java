@@ -1,11 +1,13 @@
-package com.vic.lovelytrip.entity;
+package com.vic.lovelytrip.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "trip")
+import java.util.List;
+
 @Data
-public class TripEntity extends BaseEntity {
+public class TripDetailResponse {
+
+    private long id;
 
     private String title;
     private String description;
@@ -15,5 +17,9 @@ public class TripEntity extends BaseEntity {
     private long supplierId;
 
     private int status;
+
+    private List<ImageDetail> imageList;
+
+    private List<TourGroupDetail> tourGroupList;
 
 }

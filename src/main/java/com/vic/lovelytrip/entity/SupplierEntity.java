@@ -5,7 +5,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 
-@Entity
 @Table(name = "supplier")
 @Data
 public class SupplierEntity extends BaseEntity{

@@ -1,75 +1,59 @@
 package com.vic.lovelytrip.mapper;
 
-import com.vic.lovelytrip.dto.BaseDto;
-import com.vic.lovelytrip.dto.TripDto;
-import com.vic.lovelytrip.entity.BaseEntity;
-import com.vic.lovelytrip.entity.TourGroupEntity;
+import com.vic.lovelytrip.dto.*;
 import com.vic.lovelytrip.entity.TripEntity;
-import com.vic.lovelytrip.lib.MessageInfoContainer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class TripMapper extends BaseMapper {
+public class TripMapper{
 
-    private TourGroupMapper tourGroupMapper;
-
-    @Autowired
-    public TripMapper(TourGroupMapper tourGroupMapper) {
-        this.tourGroupMapper = tourGroupMapper;
-    }
-
-    @Override
-    public BaseEntity mapToEntity(BaseDto baseDto) {
-
-        TripDto tripDto = (TripDto) baseDto;
+    public TripEntity mapToEntity(TripCreateRequest tripCreateRequest) {
 
         TripEntity tripEntity = new TripEntity();
 
-        tripEntity.setTitle(tripDto.getTitle());
-        tripEntity.setDescription(tripDto.getDescription());
-        tripEntity.setDestination(tripDto.getDestination());
-        tripEntity.setDuration(tripDto.getDuration());
-        tripEntity.setSupplierId(tripDto.getSupplierId());
+        tripEntity.setTitle(tripCreateRequest.getTitle());
+        tripEntity.setDescription(tripCreateRequest.getDescription());
+        tripEntity.setMainLocationId(tripCreateRequest.getMainLocationId());
+        tripEntity.setMinDuration(tripCreateRequest.getMinDuration());
+        tripEntity.setSupplierId(tripCreateRequest.getSupplierId());
 
         return tripEntity;
     }
 
-    @Override
-    public BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
+    public TripCreateResponse mapToCreateResponse(TripEntity tripEntity) {
 
-        TripDto tripDto = new TripDto();
-        tripDto.setMessageInfoContainer(messageInfoContainer);
+        TripCreateResponse tripCreateResponse = new TripCreateResponse();
 
-        if ( null == baseEntity ) {
-            return tripDto;
+        if (tripEntity == null || tripEntity.getId() == null) {
+            return tripCreateResponse;
+        }
+        tripCreateResponse.setId(tripEntity.getId());
+        tripCreateResponse.setCreatedTime(tripEntity.getCreatedTime());
+
+        return tripCreateResponse;
+    }
+
+
+    public TripDetailResponse mapToTripDetail(TripEntity tripEntity, List<ImageDetail> imageDetailList, List<TourGroupDetail> tourGroupDetailList) {
+
+        TripDetailResponse tripDetailResponse = new TripDetailResponse();
+
+        if (tripEntity == null || tripEntity.getId() == null) {
+            return tripDetailResponse;
         }
 
-        TripEntity tripEntity = (TripEntity) baseEntity;
+        tripDetailResponse.setId(tripEntity.getId());
+        tripDetailResponse.setTitle(tripEntity.getTitle());
+        tripDetailResponse.setDescription(tripEntity.getDescription());
+        tripDetailResponse.setMainLocationId(tripEntity.getMainLocationId());
+        tripDetailResponse.setMinDuration(tripEntity.getMinDuration());
 
-        // TODO check not null area (in this area, the content should all not be null)
-        if( null != tripEntity.getId()){
+        tripDetailResponse.setImageList(imageDetailList != null ? imageDetailList : new ArrayList<>());
+        tripDetailResponse.setTourGroupList(tourGroupDetailList != null ? tourGroupDetailList : new ArrayList<>());
 
-            tripDto.setTitle(tripEntity.getTitle());
-            tripDto.setDescription(tripEntity.getDescription());
-            tripDto.setDestination(tripEntity.getDestination());
-            tripDto.setDuration(tripEntity.getDuration());
-            tripDto.setSupplierId(tripEntity.getSupplierId());
-
-            tripDto.setId(tripEntity.getId());
-            tripDto.setCreatedTime(tripEntity.getCreatedTime());
-            tripDto.setUpdatedTime(tripEntity.getUpdatedTime());
-
-        }
-
-        List<TourGroupEntity> tourGroupEntityList = tripEntity.getTourGroupEntityList();
-
-        if ( null != tourGroupEntityList && !tourGroupEntityList.isEmpty()) {
-            tripDto.setTourGroupDtoList(tourGroupMapper.batchMapToDto(tourGroupEntityList));
-        }
-
-        return tripDto;
+        return tripDetailResponse;
     }
 }

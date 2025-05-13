@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class TourGroupDto extends BaseDto{
+public class TourGroupDetail {
+
+    private long id;
 
     private long tripId; // FK in DB
     private String title;

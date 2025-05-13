@@ -83,4 +83,28 @@ public class MessageInfoContainer {
         return this.messageInfoList.size();
     }
 
+    /**
+     * Return true if the messageInfoContainer is not empty
+     *
+     * @param
+     * @return boolean
+     * @remark
+     * */
+    public boolean containsErrors(){
+        return !this.messageInfoList.isEmpty();
+    }
+
+    /**
+     * Throw business exception is messageContainer contains error
+     *
+     * @param
+     * @return
+     * @remark
+     * */
+    public void throwIfContainsErrors(HttpStatusEnum httpStatusEnum){
+        if(this.containsErrors()){
+            throw new BusinessException(httpStatusEnum, this);
+        }
+    }
+
 }

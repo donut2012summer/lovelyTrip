@@ -1,19 +1,19 @@
-package com.vic.lovelytrip.entity;
+package com.vic.lovelytrip.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "trip")
+import java.util.List;
+
 @Data
-public class TripEntity extends BaseEntity {
+public class TripCreateRequest {
 
     private String title;
     private String description;
     private long mainLocationId;
     private int minDuration;
-    // FK in DB, no orm in java
     private long supplierId;
-
     private int status;
+
+    private List<ImageCreateRequest> imageCreateRequestList;
 
 }

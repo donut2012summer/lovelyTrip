@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Entity
 @Table(name = "booking")
 @Data
 public class BookingEntity extends BaseEntity{

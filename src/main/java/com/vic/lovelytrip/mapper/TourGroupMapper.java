@@ -1,84 +1,41 @@
 package com.vic.lovelytrip.mapper;
 
-import com.vic.lovelytrip.dto.BaseDto;
-import com.vic.lovelytrip.dto.TourGroupDto;
-import com.vic.lovelytrip.entity.BaseEntity;
+import com.vic.lovelytrip.dto.TourGroupDetail;
 import com.vic.lovelytrip.entity.TourGroupEntity;
-import com.vic.lovelytrip.lib.MessageInfoContainer;
-import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+public class TourGroupMapper {
 
-@Component
-public class TourGroupMapper extends BaseMapper{
+    public TourGroupDetail mapToTourGroupDetail(TourGroupEntity tourGroupEntity){
+        TourGroupDetail tourGroupDetail = new TourGroupDetail();
 
-    @Override
-    BaseEntity mapToEntity(BaseDto baseDto) {
+        tourGroupDetail.setId(tourGroupEntity.getId());
+        tourGroupDetail.setTripId(tourGroupEntity.getTripId());
+        tourGroupDetail.setTitle(tourGroupEntity.getTitle());
+        tourGroupDetail.setDescription(tourGroupEntity.getDescription());
+        tourGroupDetail.setReturnDate(tourGroupEntity.getReturnDate());
+        tourGroupDetail.setDepartureDate(tourGroupEntity.getDepartureDate());
+        tourGroupDetail.setUnitPrice(tourGroupEntity.getUnitPrice());
+        tourGroupDetail.setAvailability(tourGroupEntity.getAvailability());
 
-        TourGroupDto tourGroupDto = (TourGroupDto) baseDto;
-        TourGroupEntity tourGroupEntity = new TourGroupEntity();
-
-        tourGroupEntity.setTripId(tourGroupDto.getTripId());
-        tourGroupEntity.setTitle(tourGroupDto.getTitle());
-        tourGroupEntity.setDescription(tourGroupDto.getDescription());
-        tourGroupEntity.setDepartureDate(tourGroupDto.getDepartureDate());
-        tourGroupEntity.setReturnDate(tourGroupDto.getReturnDate());
-        tourGroupEntity.setUnitPrice(tourGroupDto.getUnitPrice());
-        tourGroupEntity.setAvailability(tourGroupDto.getAvailability());
-        tourGroupEntity.setStatus(tourGroupDto.getStatus());
-
-        return tourGroupEntity;
+        return tourGroupDetail;
     }
 
-    @Override
-    BaseDto mapToDto(BaseEntity baseEntity, MessageInfoContainer messageInfoContainer) {
+    public List<TourGroupDetail> batchMapToTourGroupDetail(List<TourGroupEntity> tourGroupEntityList){
 
-        TourGroupEntity tourGroupEntity = (TourGroupEntity) baseEntity;
+        List<TourGroupDetail> tourGroupDetailList = new ArrayList<>();
 
-        TourGroupDto tourGroupDto = new TourGroupDto();
-        tourGroupDto.setMessageInfoContainer(messageInfoContainer);
-
-        if (null != tourGroupEntity.getId()){
-            tourGroupDto = generateDto(tourGroupEntity);
+        if (tourGroupEntityList == null || tourGroupEntityList.isEmpty()){
+            return tourGroupDetailList;
         }
 
-        return tourGroupDto;
+        for(TourGroupEntity tourGroupEntity : tourGroupEntityList){
+            TourGroupDetail tourGroupDetail = mapToTourGroupDetail(tourGroupEntity);
+        }
+        return tourGroupDetailList;
     }
-
-    public List<TourGroupDto> batchMapToDto(List<TourGroupEntity> tourGroupEntityList){
-
-        List<TourGroupDto> tourGroupDtoList = new ArrayList<>();
-
-        if (null == tourGroupEntityList || tourGroupEntityList.isEmpty()){
-            return tourGroupDtoList;
-        }
-
-        for (TourGroupEntity tourGroupEntity : tourGroupEntityList){
-            tourGroupDtoList.add(generateDto(tourGroupEntity));
-        }
-        return tourGroupDtoList;
-    }
-
-    private TourGroupDto generateDto(TourGroupEntity tourGroupEntity) {
-
-        TourGroupDto tourGroupDto = new TourGroupDto();
-        tourGroupDto.setTripId(tourGroupEntity.getTripId());
-        tourGroupDto.setTitle(tourGroupEntity.getTitle());
-        tourGroupDto.setDescription(tourGroupEntity.getDescription());
-        tourGroupDto.setDepartureDate(tourGroupEntity.getDepartureDate());
-        tourGroupDto.setReturnDate(tourGroupEntity.getReturnDate());
-        tourGroupDto.setUnitPrice(tourGroupEntity.getUnitPrice());
-        tourGroupDto.setAvailability(tourGroupEntity.getAvailability());
-        tourGroupDto.setStatus(tourGroupEntity.getStatus());
-
-        tourGroupDto.setId(tourGroupEntity.getId());
-        tourGroupDto.setCreatedTime(tourGroupEntity.getCreatedTime());
-        tourGroupDto.setUpdatedTime(tourGroupEntity.getUpdatedTime());
-
-        return tourGroupDto;
-    };
-
-
 }

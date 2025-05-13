@@ -16,5 +16,6 @@ public class RestServiceResponse<T> implements Serializable {
         private String responseDescription;
 
         private T responseBody;
+        private T errors;
 
 }

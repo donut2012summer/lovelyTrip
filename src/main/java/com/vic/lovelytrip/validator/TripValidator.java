@@ -1,79 +1,80 @@
 package com.vic.lovelytrip.validator;
 
-import com.vic.lovelytrip.entity.BaseEntity;
-import com.vic.lovelytrip.entity.TripEntity;
+import com.vic.lovelytrip.dto.TripCreateRequest;
 import com.vic.lovelytrip.lib.MessageCodeEnum;
 import com.vic.lovelytrip.lib.MessageInfoContainer;
-import com.vic.lovelytrip.repository.SupplierRepository;
-import com.vic.lovelytrip.repository.TripRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vic.lovelytrip.lib.PatternEnum;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 @Component
 public class TripValidator extends BaseValidator {
 
-    private SupplierRepository supplierRepository;
+    private SupplierValidator supplierValidator;
 
+    private LocationValidator locationValidator;
 
-    @Autowired
-    public TripValidator(SupplierRepository supplierRepository) {
-        this.supplierRepository = supplierRepository;
-    }
-
-    @Override
-    public MessageInfoContainer validate(BaseEntity entity) {
-
-        MessageInfoContainer messageInfoContainer = new MessageInfoContainer();
-
-        TripEntity tripEntity = (TripEntity) entity;
-
-        boolean isValidSupplier = validateSupplier(tripEntity.getSupplierId(), messageInfoContainer);
-
-        if (!isValidSupplier) {
-            return messageInfoContainer;
-        }
-
-        return checkRequiredFields(tripEntity, messageInfoContainer);
+    public TripValidator(SupplierValidator supplierValidator, LocationValidator locationValidator) {
+        this.supplierValidator = supplierValidator;
+        this.locationValidator = locationValidator;
     }
 
     /**
-     * validate supplier id and add message if supplier id does not exist
-     * @param supplierId
-     * @param messageInfoContainer
+     * validate content of CreateTripRequest
+     * @param request
      * @return MessageInfoContainer
      * @remark
      * */
-    protected boolean validateSupplier(long supplierId, MessageInfoContainer messageInfoContainer) {
+    public MessageInfoContainer validateCreateTripRequest(TripCreateRequest request) {
 
-        boolean isBlankId = !validateNotBlank("trip.supplierId", supplierId, messageInfoContainer);
+        MessageInfoContainer messageInfoContainer = new MessageInfoContainer();
 
-        if (isBlankId) {
-            return false;
+        supplierValidator.validateSupplierId(request.getSupplierId(), messageInfoContainer);
+
+        if (messageInfoContainer.containsErrors()) {
+            return messageInfoContainer;
         }
 
-        if(supplierRepository.existsById(supplierId)){
-            return true;
-        }
+        checkRequiredFields(request, messageInfoContainer);
 
-        messageInfoContainer.addMessage(MessageCodeEnum.DATA_NOT_FOUND, "Supplier");
-        return false;
+        return messageInfoContainer;
+    }
+
+    public void checkTripIdFormat(Long tripId, MessageInfoContainer messageInfoContainer) {
+        checkIdFormat("trip.id", tripId, messageInfoContainer);
     }
 
     /**
      * Validate the required fields in tripEntity, add messages in the super message container if they are empty
      *
-     * @param tripEntity
+     * @param request
      * @return
      * @remark
      * */
-    private MessageInfoContainer checkRequiredFields(TripEntity tripEntity, MessageInfoContainer messageInfoContainer) {
-        validateNotBlank("trip.title", tripEntity.getTitle(), messageInfoContainer);
-        validateNotBlank("trip.description", tripEntity.getDescription(), messageInfoContainer);
-        validateNotBlank("trip.destination", tripEntity.getDestination(), messageInfoContainer);
-        validateNotBlank("trip.duration", tripEntity.getDuration(), messageInfoContainer);
+    private MessageInfoContainer checkRequiredFields(TripCreateRequest request, MessageInfoContainer messageInfoContainer) {
+
+        // title
+        checkFormat("title", request.getTitle(), PatternEnum.TITLE, messageInfoContainer);
+
+        // description
+        checkFormat("description", request.getDescription(), PatternEnum.DESCRIPTION, messageInfoContainer);
+
+        // min duration
+        boolean minDurationIsEmpty = addMessageWhenFieldBlank("trip.min duration", request.getMinDuration(), messageInfoContainer);
+
+        if (!minDurationIsEmpty && request.getMinDuration() <= 0){
+            messageInfoContainer.addMessage(MessageCodeEnum.INVALID_FORMAT, "min duration");
+        }
+
+        // location id
+        locationValidator.validateLocationId(request.getMainLocationId(), messageInfoContainer);
+
+        // image list
+        if (CollectionUtils.isEmpty(request.getImageCreateRequestList())){
+            messageInfoContainer.addMessage(MessageCodeEnum.REQUIRE_AT_LEAST_ONE, "image");
+        }
 
         return messageInfoContainer;
     }
