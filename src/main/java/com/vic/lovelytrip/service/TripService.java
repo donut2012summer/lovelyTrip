@@ -1,6 +1,7 @@
 package com.vic.lovelytrip.service;
 
 import com.vic.lovelytrip.dto.*;
+import com.vic.lovelytrip.lib.Traceable;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public interface TripService {
      * @return a {@link TripCreateResponse} object containing the generated trip ID and creation metadata.
      * @throws com.vic.lovelytrip.lib.BusinessException if the input request is invalid or contains errors.
      */
+    @Traceable
     TripCreateResponse createTrip(TripCreateRequest tripCreateRequest);
 
     /**
@@ -23,6 +25,7 @@ public interface TripService {
      * @return a {@link TripDetailResponse} containing trip details and optionally its tour groups.
      * @throws NotFoundException if no trip exists with the given ID.
      */
+    @Traceable
     TripDetailResponse getTripDetailById(Long id, boolean includeTourGroups);
 
     /**
@@ -31,6 +34,7 @@ public interface TripService {
      * @param tripSearchRequest the request containing filters such as keyword, location, duration, or other parameters.
      * @return a list of {@link TripSearchResponse} objects matching the search criteria; may be empty if no matches are found.
      */
+    @Traceable
     List<TripSearchResponse> searchTrip(TripSearchRequest tripSearchRequest);
 
 }

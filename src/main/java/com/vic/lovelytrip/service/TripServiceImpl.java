@@ -14,6 +14,7 @@ import com.vic.lovelytrip.repository.TripCrudRepository;
 import com.vic.lovelytrip.validator.TripValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +56,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    @Traceable
     public TripDetailResponse getTripDetailById(Long id, boolean includeTourGroups) {
 
         MessageInfoContainer messageInfoContainer = new MessageInfoContainer();
@@ -69,7 +71,7 @@ public class TripServiceImpl implements TripService {
 
         Long tripId = tripEntity.getId();
 
-        return tripMapper.mapToTripDetail(tripEntity, prepareImageDetailList(tripId), prepareTourGroupDetailList(tripId, includeTourGroups));
+        return tripMapper.mapToTripDetailResponse(tripEntity, prepareImageDetailList(tripId), prepareTourGroupDetailList(tripId, includeTourGroups));
 
     }
 
@@ -109,8 +111,8 @@ public class TripServiceImpl implements TripService {
         List<ImageEntity> imageEntityList = imageMapper.batchMapToEntity(request.getImageCreateRequestList());
 
         imageEntityList.forEach(imageEntity -> {
-            imageEntity.setReference_table(ImageEnum.TRIP.getCode());
-            imageEntity.setReference_id(tripId);
+            imageEntity.setReferenceTable(ImageEnum.TRIP.getCode());
+            imageEntity.setReferenceId(tripId);
         });
 
         return imageEntityList;
@@ -124,7 +126,7 @@ public class TripServiceImpl implements TripService {
      */
     private List<ImageDetail> prepareImageDetailList(Long tripId) {
 
-        List<ImageEntity> imageEntityList = imageCrudRepository.findByTripId(tripId);
+        List<ImageEntity> imageEntityList = imageCrudRepository.findByReferenceIdAndReferenceTable(tripId, ImageEnum.TRIP.getCode());
 
         return imageEntityList.isEmpty()
                 ? Collections.emptyList()
@@ -153,8 +155,6 @@ public class TripServiceImpl implements TripService {
         return tourGroupEntityList.isEmpty() ? Collections.emptyList() : tourGroupMapper.batchMapToTourGroupDetail(tourGroupEntityList);
 
     }
-
-
 
     /**
      * Finds an existing {@link TripEntity} by its ID.

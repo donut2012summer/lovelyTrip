@@ -17,7 +17,7 @@ public class TripQueryRepository {
     private final SqlLoader sqlLoader;
     private final String querySql;
 
-    public TripQueryRepository(NamedParameterJdbcTemplate jdbcTemplate, SqlLoader sqlLoader, String querySql) throws Exception{
+    public TripQueryRepository(NamedParameterJdbcTemplate jdbcTemplate, SqlLoader sqlLoader) throws Exception{
         this.jdbcTemplate = jdbcTemplate;
         this.sqlLoader = sqlLoader;
         this.querySql = sqlLoader.load("db_script/trip_search.sql");

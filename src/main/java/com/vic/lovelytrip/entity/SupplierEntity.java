@@ -1,8 +1,7 @@
 package com.vic.lovelytrip.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.Data;
+import org.springframework.data.relational.core.mapping.Table;
 
 
 @Table(name = "supplier")

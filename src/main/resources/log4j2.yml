@@ -8,16 +8,10 @@ Configuration:
       PatternLayout:
         pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}.%M():%L - %m%n"
 
-    File:
-      name: ServiceFileAppender
-      fileName: logs/service.log
-      PatternLayout:
-        pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}.%M():%L - %m%n"
-
     RollingFile:
-      name: RepoFileAppender
-      fileName: logs/repo.log
-      filePattern: logs/repo-%d{yyyy-MM-dd}-%i.log.gz
+      name: RollingFileAppender
+      fileName: logs/app.log
+      filePattern: logs/app-%d{yyyy-MM-dd}-%i.log.gz
       PatternLayout:
         pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}.%M():%L - %m%n"
       Policies:
@@ -26,25 +20,39 @@ Configuration:
         SizeBasedTriggeringPolicy:
           size: 10MB
 
+
   Loggers:
     Logger:
-      - name: com.vic.lovelytrip.service
+      - name: com.vic.lovelytrip
         level: debug
         additivity: false
         includeLocation: true
         AppenderRef:
           - ref: ConsoleAppender
-          - ref: ServiceFileAppender
+          - ref: RollingFileAppender
 
-      - name: com.vic.lovelytrip.repository
-        level: info
-        additivity: false
-        includeLocation: true
-        AppenderRef:
-          - ref: RepoFileAppender
+      - name: org.springframework
+        level: warn
+
+      - name: org.springframework.boot.autoconfigure
+        level: error
+
+      - name: com.zaxxer.hikari
+        level: warn
+
+      - name: org.apache.catalina
+        level: warn
+
+      - name: org.apache.coyote
+        level: warn
+
+
+
 
     Root:
       level: info
       includeLocation: true
+      additivity: false
       AppenderRef:
         - ref: ConsoleAppender
+        - ref: RollingFileAppender

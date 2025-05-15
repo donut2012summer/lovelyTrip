@@ -9,7 +9,6 @@ import java.sql.SQLException;
 public class ImageRowMapper implements RowMapper<ImageEntity> {
     @Override
     public ImageEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-
         return new ImageEntity();
     }
 }

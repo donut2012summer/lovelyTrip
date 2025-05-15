@@ -37,7 +37,7 @@ public class TripMapper{
     }
 
 
-    public TripDetailResponse mapToTripDetail(TripEntity tripEntity, List<ImageDetail> imageDetailList, List<TourGroupDetail> tourGroupDetailList) {
+    public TripDetailResponse mapToTripDetailResponse(TripEntity tripEntity, List<ImageDetail> imageDetailList, List<TourGroupDetail> tourGroupDetailList) {
 
         TripDetailResponse tripDetailResponse = new TripDetailResponse();
 
