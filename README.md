@@ -13,44 +13,45 @@ LovelyTrip is a Spring Boot backend project demonstrating clean architecture and
 
 ## 👉🏻 System Design Highlights
 
-| Principle                     | Implementation                                                             |
-|-------------------------------|----------------------------------------------------------------------------|
-| **Clean Architecture**        | Structured layers: controller → service → repository                       |
-| **DTO Pattern**               | Input/output objects decoupled from entities via dedicated DTOs            |
-| **Validation Layer**          | Centralized validators to enforce business rules                           |
-| **Aspect-Oriented Logging**   | Logs handled via `@Aspect` to separate concerns                            |
-| **Global Exception Handling** | Robust error handling using `BusinessException` and custom error responses |
-
+| Principle                     | Description                                                                                      | Reference                                                                                          |
+|-------------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| **Clean Architecture**        | Structured layers (controller → service → repository) for clear separation and maintainability   | [TripService](../service/TripServiceImpl.java)                                                     |
+| **DTO Pattern**               | Decouples API and internal models using DTOs for clean contracts and better encapsulation        | [TripMapper](../dto/TripCreateRequest.java)                                                        |
+| **Validation Layer**          | Centralized validators enforce business rules and promote reuse                                  | [TripValidator](../validator/TripValidator.java), [BaseValidator](../validator/BaseValidator.java) |
+| **Aspect-Oriented Logging**   | Uses `@Aspect` to auto-log method calls, keeping logic clean and traceable                       | [TraceableAspect](../aspect/TraceableAspect.java)                                                  |
+| **Global Exception Handling** | Handles errors via `BusinessException` and custom responses for consistency and clarity          | [HttpExceptionHandling](../aspect/HttpExceptionHandlingAspect.java)                                |
+| **Mapper Conversion**         | Dedicated mappers handle DTO ↔ entity conversion for consistency and testability                 | [TripMapper](../mapper/TripMapper.java)                                                            |
+| **Traceable Interface**       | `@Traceable` marks classes for auto-logging, improving observability with zero business impact   | [Traceable](../lib/Traceable.java)                                                                 |
 
 
 ## 👉🏻 API Endpoints Overview
 
-| Module     | Method   | Endpoint                     | Description                        | Status          |
-|------------|----------|------------------------------|------------------------------------|-----------------|
-| Trip       | GET      | `/trips/search?query=`       | Keyword-based trip search          | ✅ Completed     |
-| Trip       | GET      | `/trips/advanced-search`     | Advanced filters, pagination, etc. | 🛠️ In Progress |
-| Trip       | GET      | `/trips/{id}`                | Retrieve one trip by ID            | ✅ Completed     |
-| Trip       | POST     | `/trips`                     | Create a new trip                  | ✅ Completed     |
-| Trip       | PUT      | `/trips/{id}`                | Update an existing trip            | 🕐 Planned      |
-| Trip       | DELETE   | `/trips/{id}`                | Soft-delete a trip                 | 🕐 Planned      |
-| Tour Group | GET      | `/api/trips/{tripId}/groups` | List groups under a trip           | 🕐 Planned      |
-| Tour Group | GET      | `/api/groups/{groupId}`      | Get group schedule and pricing     | 🕐 Planned      |
-| Tour Group | POST     | `/api/trips/{tripId}/groups` | Add a tour group                   | 🕐 Planned      |
-| Tour Group | PUT      | `/api/groups/{groupId}`      | Update a tour group                | 🕐 Planned      |
-| Tour Group | DELETE   | `/api/groups/{groupId}`      | Remove/cancel a group              | 🕐 Planned      |
-| Booking    | POST     | `/api/bookings`              | Book a tour group                  | 🕐 Planned      |
-| Booking    | GET      | `/api/bookings/{id}`         | View a specific booking            | 🕐 Planned      |
-| Booking    | GET      | `/api/users/{id}/bookings`   | List bookings by user              | 🕐 Planned      |
-| Booking    | PUT      | `/api/bookings/{id}/cancel`  | Cancel a booking                   | 🕐 Planned      |
-| Image      | POST     | `/api/images`                | Upload image                       | 🕐 Planned      |
-| Image      | GET      | `/api/images/{id}`           | Retrieve image                     | 🕐 Planned      |
-| Image      | DELETE   | `/api/images/{id}`           | Delete image                       | 🕐 Planned      |
-| Auth       | POST     | `/api/auth/register`         | Register user/supplier             | 🕐 Planned      |
-| Auth       | POST     | `/api/auth/login`            | Login and receive token            | 🕐 Planned      |
-| User       | GET      | `/api/users/me`              | Get current user profile           | 🕐 Planned      |
-| User       | PUT      | `/api/users/me`              | Update profile                     | 🕐 Planned      |
-| Review     | POST     | `/api/trips/{id}/reviews`    | Submit a review                    | 🕐 Planned      |
-| Review     | GET      | `/api/trips/{id}/reviews`    | List all reviews for a trip        | 🕐 Planned      |
+| Module     | Method   | Endpoint                         | Description                        | Status          |
+|------------|----------|----------------------------------|------------------------------------|-----------------|
+| Trip       | GET      | `/trips/search?query=`           | Keyword-based trip search          | ✅ Completed     |
+| Trip       | GET      | `/trips/advanced-search`         | Advanced filters, pagination, etc. | 🛠️ In Progress |
+| Trip       | GET      | `/trips/{id}?includeTourGroups=` | Retrieve one trip by ID            | ✅ Completed     |
+| Trip       | POST     | `/trips`                         | Create a new trip                  | ✅ Completed     |
+| Trip       | PUT      | `/trips/{id}`                    | Update an existing trip            | 🕐 Planned      |
+| Trip       | DELETE   | `/trips/{id}`                    | Soft-delete a trip                 | 🕐 Planned      |
+| Tour Group | GET      | `/api/trips/{tripId}/groups`     | List groups under a trip           | 🕐 Planned      |
+| Tour Group | GET      | `/api/groups/{groupId}`          | Get group schedule and pricing     | 🕐 Planned      |
+| Tour Group | POST     | `/api/trips/{tripId}/groups`     | Add a tour group                   | 🕐 Planned      |
+| Tour Group | PUT      | `/api/groups/{groupId}`          | Update a tour group                | 🕐 Planned      |
+| Tour Group | DELETE   | `/api/groups/{groupId}`          | Remove/cancel a group              | 🕐 Planned      |
+| Booking    | POST     | `/api/bookings`                  | Book a tour group                  | 🕐 Planned      |
+| Booking    | GET      | `/api/bookings/{id}`             | View a specific booking            | 🕐 Planned      |
+| Booking    | GET      | `/api/users/{id}/bookings`       | List bookings by user              | 🕐 Planned      |
+| Booking    | PUT      | `/api/bookings/{id}/cancel`      | Cancel a booking                   | 🕐 Planned      |
+| Image      | POST     | `/api/images`                    | Upload image                       | 🕐 Planned      |
+| Image      | GET      | `/api/images/{id}`               | Retrieve image                     | 🕐 Planned      |
+| Image      | DELETE   | `/api/images/{id}`               | Delete image                       | 🕐 Planned      |
+| Auth       | POST     | `/api/auth/register`             | Register user/supplier             | 🕐 Planned      |
+| Auth       | POST     | `/api/auth/login`                | Login and receive token            | 🕐 Planned      |
+| User       | GET      | `/api/users/me`                  | Get current user profile           | 🕐 Planned      |
+| User       | PUT      | `/api/users/me`                  | Update profile                     | 🕐 Planned      |
+| Review     | POST     | `/api/trips/{id}/reviews`        | Submit a review                    | 🕐 Planned      |
+| Review     | GET      | `/api/trips/{id}/reviews`        | List all reviews for a trip        | 🕐 Planned      |
 
 
 
