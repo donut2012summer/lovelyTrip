@@ -13,15 +13,16 @@ LovelyTrip is a Spring Boot backend project demonstrating clean architecture and
 
 ## 👉🏻 System Design Highlights
 
-| Principle                     | Description                                                                                      | Reference                                                                                          |
-|-------------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
-| **Clean Architecture**        | Structured layers (controller → service → repository) for clear separation and maintainability   | [TripService](../service/TripServiceImpl.java)                                                     |
-| **DTO Pattern**               | Decouples API and internal models using DTOs for clean contracts and better encapsulation        | [TripMapper](../dto/TripCreateRequest.java)                                                        |
-| **Validation Layer**          | Centralized validators enforce business rules and promote reuse                                  | [TripValidator](../validator/TripValidator.java), [BaseValidator](../validator/BaseValidator.java) |
-| **Aspect-Oriented Logging**   | Uses `@Aspect` to auto-log method calls, keeping logic clean and traceable                       | [TraceableAspect](../aspect/TraceableAspect.java)                                                  |
-| **Global Exception Handling** | Handles errors via `BusinessException` and custom responses for consistency and clarity          | [HttpExceptionHandling](../aspect/HttpExceptionHandlingAspect.java)                                |
-| **Mapper Conversion**         | Dedicated mappers handle DTO ↔ entity conversion for consistency and testability                 | [TripMapper](../mapper/TripMapper.java)                                                            |
-| **Traceable Interface**       | `@Traceable` marks classes for auto-logging, improving observability with zero business impact   | [Traceable](../lib/Traceable.java)                                                                 |
+| Principle                     | Description                                                                                    | File Path                                                                                                                        |
+|-------------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| **Clean Architecture**        | Structured layers (controller → service → repository) for clear separation and maintainability | `src/main/java/com/vic/lovelytrip/service/TripServiceImpl.java`                                                                  |
+| **DTO Pattern**               | Decouples API and internal models using DTOs for clean contracts and better encapsulation      | `src/main/java/com/vic/lovelytrip/dto/TripCreateRequest.java`, `src/main/java/com/vic/lovelytrip/dto/TripResponse.java`          |
+| **Validation Layer**          | Centralized validators enforce business rules and promote reuse                                | `src/main/java/com/vic/lovelytrip/validator/TripValidator.java`, `src/main/java/com/vic/lovelytrip/validator/BaseValidator.java` |
+| **Aspect-Oriented Logging**   | Uses `@Aspect` to auto-log method calls, keeping logic clean and traceable                     | `src/main/java/com/vic/lovelytrip/aspect/TraceableAspect.java`                                                                   |
+| **Global Exception Handling** | Handles errors via `BusinessException` and structured error responses                          | `src/main/java/com/vic/lovelytrip/aspect/HttpExceptionHandlingAspect.java`                                                       |
+| **Mapper Conversion**         | Dedicated mappers convert between DTOs and entities for consistency and testability            | `src/main/java/com/vic/lovelytrip/mapper/TripMapper.java`                                                                        |
+| **Traceable Interface**       | `@Traceable` annotation enables auto-logging via aspect with minimal code intrusion            | `src/main/java/com/vic/lovelytrip/lib/Traceable.java`                                                                            |
+
 
 
 ## 👉🏻 API Endpoints Overview
