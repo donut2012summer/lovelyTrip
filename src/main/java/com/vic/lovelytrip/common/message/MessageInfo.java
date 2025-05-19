@@ -1,4 +1,4 @@
-package com.vic.lovelytrip.lib;
+package com.vic.lovelytrip.common.message;
 
 import lombok.Getter;
 import lombok.Setter;

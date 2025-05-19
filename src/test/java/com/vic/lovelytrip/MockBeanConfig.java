@@ -1,9 +1,10 @@
 package com.vic.lovelytrip;
 
 import com.vic.lovelytrip.mapper.TripMapper;
-import com.vic.lovelytrip.repository.ImageCrudRepository;
+import com.vic.lovelytrip.repository.ImageRepository;
 import com.vic.lovelytrip.repository.TourGroupCrudRepository;
-import com.vic.lovelytrip.repository.TripCrudRepository;
+import com.vic.lovelytrip.repository.TripRepository;
+import com.vic.lovelytrip.service.ImageService;
 import com.vic.lovelytrip.service.TripService;
 import com.vic.lovelytrip.service.TripServiceImpl;
 import com.vic.lovelytrip.validator.TripValidator;
@@ -15,8 +16,8 @@ import org.springframework.context.annotation.Bean;
 public class MockBeanConfig {
 
     @Bean
-    public TripCrudRepository tripCrudRepository(){
-        return Mockito.mock(TripCrudRepository.class);
+    public TripRepository tripCrudRepository(){
+        return Mockito.mock(TripRepository.class);
     }
 
     @Bean
@@ -30,8 +31,13 @@ public class MockBeanConfig {
     }
 
     @Bean
-    public ImageCrudRepository imageCrudRepository(){
-        return Mockito.mock(ImageCrudRepository.class);
+    public ImageRepository imageCrudRepository(){
+        return Mockito.mock(ImageRepository.class);
+    }
+
+    @Bean
+    public ImageService imageService(){
+        return Mockito.mock(ImageService.class);
     }
 
     @Bean
@@ -42,6 +48,7 @@ public class MockBeanConfig {
                 tripMapper(),
                 imageCrudRepository(),
                 Mockito.mock(TourGroupCrudRepository.class)
+                , imageService()
         );
     }
 

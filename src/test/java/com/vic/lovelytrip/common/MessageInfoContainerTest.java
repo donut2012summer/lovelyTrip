@@ -1,5 +1,7 @@
-package com.vic.lovelytrip.lib;
+package com.vic.lovelytrip.common;
 
+import com.vic.lovelytrip.common.message.MessageCodeEnum;
+import com.vic.lovelytrip.common.message.MessageInfoContainer;
 import org.junit.jupiter.api.Test;
 
 public class MessageInfoContainerTest {

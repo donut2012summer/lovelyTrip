@@ -1,4 +1,4 @@
-package com.vic.lovelytrip;
+package com.vic.lovelytrip.config;
 
 import org.springframework.context.annotation.Configuration;
 

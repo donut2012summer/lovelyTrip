@@ -1,4 +1,4 @@
-package com.vic.lovelytrip.lib;
+package com.vic.lovelytrip.common.enums;
 
 import lombok.Getter;
 

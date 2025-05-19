@@ -1,5 +1,7 @@
-package com.vic.lovelytrip.lib;
+package com.vic.lovelytrip.common.message;
 
+import com.vic.lovelytrip.common.enums.HttpStatusEnum;
+import com.vic.lovelytrip.common.exception.BusinessException;
 import lombok.Getter;
 import lombok.Setter;
 

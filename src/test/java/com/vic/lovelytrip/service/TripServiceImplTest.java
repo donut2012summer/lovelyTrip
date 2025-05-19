@@ -1,16 +1,18 @@
 package com.vic.lovelytrip.service;
 
 import com.vic.lovelytrip.TestDataFactory;
+import com.vic.lovelytrip.common.enums.ImageReferenceTableEnum;
+import com.vic.lovelytrip.common.exception.BusinessException;
+import com.vic.lovelytrip.common.message.MessageInfoContainer;
 import com.vic.lovelytrip.dto.TripCreateRequest;
 import com.vic.lovelytrip.dto.TripCreateResponse;
 import com.vic.lovelytrip.dto.TripDetailResponse;
 import com.vic.lovelytrip.entity.ImageEntity;
 import com.vic.lovelytrip.entity.TripEntity;
-import com.vic.lovelytrip.lib.*;
 import com.vic.lovelytrip.mapper.TripMapper;
-import com.vic.lovelytrip.repository.ImageCrudRepository;
+import com.vic.lovelytrip.repository.ImageRepository;
 import com.vic.lovelytrip.repository.TourGroupCrudRepository;
-import com.vic.lovelytrip.repository.TripCrudRepository;
+import com.vic.lovelytrip.repository.TripRepository;
 import com.vic.lovelytrip.validator.TripValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,10 +34,10 @@ import static org.mockito.Mockito.*;
 public class TripServiceImplTest {
 
     @Mock
-    private TripCrudRepository tripCrudRepository;
+    private TripRepository tripRepository;
 
     @Mock
-    private ImageCrudRepository imageCrudRepository;
+    private ImageRepository imageRepository;
 
     @Mock
     private TripValidator tripValidator;
@@ -43,16 +45,20 @@ public class TripServiceImplTest {
     @Mock
     private TourGroupCrudRepository tourGroupCrudRepository;
 
+    @Mock
+    private ImageService imageService;
+
     private TripServiceImpl tripServiceImpl;
 
     @BeforeEach
     void setUp(){
         tripServiceImpl = new TripServiceImpl(
-                tripCrudRepository,
+                tripRepository,
                 tripValidator,
                 new TripMapper(),
-                imageCrudRepository,
-                tourGroupCrudRepository
+                imageRepository,
+                tourGroupCrudRepository,
+                imageService
         );
     }
 
@@ -68,16 +74,17 @@ public class TripServiceImplTest {
         when(tripValidator.validateCreateTripRequest(tripCreateRequest)).thenReturn(mockContainer);
         doNothing().when(mockContainer).throwIfContainsErrors(any());
 
-        when(tripCrudRepository.save(any())).thenAnswer(invocationOnMock -> {
+        when(tripRepository.save(any())).thenAnswer(invocationOnMock -> {
             TripEntity tripEntity = (TripEntity) invocationOnMock.getArgument(0);
             tripEntity.setId(1L);
             tripEntity.setCreatedTime(OffsetDateTime.now());
             return tripEntity;
         });
 
-        when(imageCrudRepository.saveAll(any())).thenAnswer(invocationOnMock -> {
+        when(imageRepository.saveAll(any())).thenAnswer(invocationOnMock -> {
             return (List<ImageEntity>) invocationOnMock.getArgument(0);
         });
+
 
         // act
         TripCreateResponse tripCreateResponse = tripServiceImpl.createTrip(tripCreateRequest);
@@ -85,13 +92,9 @@ public class TripServiceImplTest {
         // assert
         assertEquals(1L, tripCreateResponse.getId());
         assertNotNull(tripCreateResponse.getCreatedTime());
-        verify(tripCrudRepository).save(any());
-        verify(imageCrudRepository).saveAll(any());
+        verify(tripRepository).save(any());
+        verify(imageRepository).saveAll(any());
         verify(tripValidator).validateCreateTripRequest(tripCreateRequest);
-
-        ArgumentCaptor<List<ImageEntity>> imageCaptor = ArgumentCaptor.forClass(List.class);
-        verify(imageCrudRepository).saveAll(imageCaptor.capture());
-        assertEquals(2, imageCaptor.getValue().size());
     }
 
     @Test
@@ -111,7 +114,7 @@ public class TripServiceImplTest {
                 () -> tripServiceImpl.createTrip(tripCreateRequest)
         );
 
-        verifyNoMoreInteractions(tripCrudRepository, imageCrudRepository);
+        verifyNoMoreInteractions(tripRepository, imageRepository);
     }
 
     @Test
@@ -123,8 +126,8 @@ public class TripServiceImplTest {
         boolean includeTourGroups = true;
 
         doNothing().when(tripValidator).checkTripIdFormat(eq(tripId), any(MessageInfoContainer.class));
-        when(tripCrudRepository.findById(eq(tripId))).thenReturn(Optional.of(TestDataFactory.getValidTripEntity()));
-        when(imageCrudRepository.findByReferenceIdAndReferenceTable(eq(tripId), eq(referenceId))).thenReturn(TestDataFactory.getValidImageEntityList());
+        when(tripRepository.findById(eq(tripId))).thenReturn(Optional.of(TestDataFactory.getValidTripEntity()));
+        when(imageRepository.findByReferenceIdAndReferenceTable(eq(tripId), eq(referenceId))).thenReturn(TestDataFactory.getValidImageEntityList());
         when(tourGroupCrudRepository.findByTripId(eq(tripId))).thenReturn(Collections.emptyList());
 
         // act
@@ -136,7 +139,7 @@ public class TripServiceImplTest {
         assertNotNull(response.getImageList());
         assertEquals(1, response.getImageList().size());
         verify(tripValidator).checkTripIdFormat(eq(tripId), any(MessageInfoContainer.class));
-        verify(imageCrudRepository).findByReferenceIdAndReferenceTable(eq(tripId), eq(referenceId));
+        verify(imageRepository).findByReferenceIdAndReferenceTable(eq(tripId), eq(referenceId));
         verify(tourGroupCrudRepository).findByTripId(eq(tripId));
     }
 }

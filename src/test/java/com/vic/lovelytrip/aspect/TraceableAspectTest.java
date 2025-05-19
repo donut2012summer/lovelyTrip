@@ -1,6 +1,6 @@
 package com.vic.lovelytrip.aspect;
 
-import com.vic.lovelytrip.repository.ImageCrudRepository;
+import com.vic.lovelytrip.repository.ImageRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TraceableAspectTest {
 
     @Autowired
-    ImageCrudRepository imageCrudRepository;
+    ImageRepository imageRepository;
 
     @Test
     void testAspectOnRepository(){
-        imageCrudRepository.findByReferenceIdAndReferenceTable(1l, 1);
+        imageRepository.findByReferenceIdAndReferenceTable(1l, 1);
     }
 }

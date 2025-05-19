@@ -1,7 +1,8 @@
 package com.vic.lovelytrip.service;
 
+import com.vic.lovelytrip.common.exception.BusinessException;
 import com.vic.lovelytrip.dto.*;
-import com.vic.lovelytrip.lib.Traceable;
+import com.vic.lovelytrip.common.annotation.Traceable;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface TripService {
      *
      * @param tripCreateRequest the request object containing trip details such as title, description, location, duration, and associated images.
      * @return a {@link TripCreateResponse} object containing the generated trip ID and creation metadata.
-     * @throws com.vic.lovelytrip.lib.BusinessException if the input request is invalid or contains errors.
+     * @throws BusinessException if the input request is invalid or contains errors.
      */
     @Traceable
     TripCreateResponse createTrip(TripCreateRequest tripCreateRequest);
@@ -23,7 +24,7 @@ public interface TripService {
      * @param id the unique identifier of the trip to retrieve.
      * @param includeTourGroups whether to include associated tour group details in the response.
      * @return a {@link TripDetailResponse} containing trip details and optionally its tour groups.
-     * @throws NotFoundException if no trip exists with the given ID.
+     * @throws BusinessException if no trip exists with the given ID.
      */
     @Traceable
     TripDetailResponse getTripDetailById(Long id, boolean includeTourGroups);

@@ -1,34 +1,36 @@
 package com.vic.lovelytrip.service;
 
+import com.vic.lovelytrip.common.annotation.Traceable;
+import com.vic.lovelytrip.common.enums.HttpStatusEnum;
+import com.vic.lovelytrip.common.enums.ImageReferenceTableEnum;
+import com.vic.lovelytrip.common.enums.ImageStatusEnum;
+import com.vic.lovelytrip.common.enums.TripStatusEnum;
+import com.vic.lovelytrip.common.message.MessageCodeEnum;
+import com.vic.lovelytrip.common.message.MessageInfoContainer;
 import com.vic.lovelytrip.dto.*;
 import com.vic.lovelytrip.entity.ImageEntity;
 import com.vic.lovelytrip.entity.TourGroupEntity;
 import com.vic.lovelytrip.entity.TripEntity;
-import com.vic.lovelytrip.lib.*;
 import com.vic.lovelytrip.mapper.ImageMapper;
 import com.vic.lovelytrip.mapper.TourGroupMapper;
 import com.vic.lovelytrip.mapper.TripMapper;
-import com.vic.lovelytrip.repository.ImageCrudRepository;
+import com.vic.lovelytrip.repository.ImageRepository;
 import com.vic.lovelytrip.repository.TourGroupCrudRepository;
-import com.vic.lovelytrip.repository.TripCrudRepository;
+import com.vic.lovelytrip.repository.TripRepository;
 import com.vic.lovelytrip.validator.TripValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TripServiceImpl implements TripService {
 
-    private final ImageCrudRepository imageCrudRepository;
+    private final ImageRepository imageRepository;
 
     private final TourGroupCrudRepository tourGroupCrudRepository;
 
-    private final TripCrudRepository tripRepository;
+    private final TripRepository tripRepository;
 
     private final TripValidator tripValidator;
 
@@ -37,13 +39,15 @@ public class TripServiceImpl implements TripService {
     private final ImageMapper imageMapper = new ImageMapper();
 
     private final TourGroupMapper tourGroupMapper = new TourGroupMapper();
+    private final ImageService imageService;
 
-    public TripServiceImpl (TripCrudRepository tripRepository, TripValidator tripValidator, TripMapper tripMapper, ImageCrudRepository imageCrudRepository, TourGroupCrudRepository tourGroupCrudRepository) {
+    public TripServiceImpl (TripRepository tripRepository, TripValidator tripValidator, TripMapper tripMapper, ImageRepository imageRepository, TourGroupCrudRepository tourGroupCrudRepository, ImageService imageService) {
         this.tripRepository = tripRepository;
         this.tripValidator = tripValidator;
         this.tripMapper = tripMapper;
-        this.imageCrudRepository = imageCrudRepository;
+        this.imageRepository = imageRepository;
         this.tourGroupCrudRepository = tourGroupCrudRepository;
+        this.imageService = imageService;
     }
 
     @Override
@@ -80,6 +84,11 @@ public class TripServiceImpl implements TripService {
         return List.of();
     }
 
+
+
+
+
+
     /**
      * Save trip details included imageList
      *
@@ -91,17 +100,37 @@ public class TripServiceImpl implements TripService {
 
         TripEntity tripEntity = tripRepository.save(prepareTripEntity(request));
 
-        imageCrudRepository.saveAll(prepareImageEntityList(tripEntity.getId(), request));
+        Long tripId = tripEntity.getId();
+
+        List<ImageEntity> imageEntityList = imageService.prepareImageEntityListForSaving(request.getImageCreateRequestList(), ImageReferenceTableEnum.TRIP, tripId);
+        imageRepository.saveAll(imageEntityList);
+
+        for (ImageEntity imageEntity : imageEntityList) {
+            storeImagePermanently(imageEntity);
+        }
 
         return tripEntity;
     }
+
+    private void storeImagePermanently(ImageEntity imageEntity) {
+
+        boolean isImageSaved = imageService.relocateImage("tmp", "trip", imageEntity.getStoredFilename());
+
+        if (isImageSaved){
+            imageEntity.setStatus(ImageStatusEnum.STORED.getCode());
+        }
+    }
+
+
+
+
 
     private TripEntity prepareTripEntity(TripCreateRequest request) {
 
         TripEntity tripEntity = tripMapper.mapToEntity(request);
 
         // active trip
-        tripEntity.setStatus(StatusEnum.TRIP_ACTIVE.getStatusCode());
+        tripEntity.setStatus(TripStatusEnum.PUBLISHED.getStatusCode());
 
         return tripEntity;
     }
@@ -110,13 +139,16 @@ public class TripServiceImpl implements TripService {
 
         List<ImageEntity> imageEntityList = imageMapper.batchMapToEntity(request.getImageCreateRequestList());
 
+        // generate saved url
+
         imageEntityList.forEach(imageEntity -> {
-            imageEntity.setReferenceTable(ImageEnum.TRIP.getCode());
+            imageEntity.setReferenceTable(ImageReferenceTableEnum.TRIP.getCode());
             imageEntity.setReferenceId(tripId);
         });
 
         return imageEntityList;
     }
+
 
     /**
      * Retrieves and maps image entities to detail DTOs for the given trip ID.
@@ -126,7 +158,7 @@ public class TripServiceImpl implements TripService {
      */
     private List<ImageDetail> prepareImageDetailList(Long tripId) {
 
-        List<ImageEntity> imageEntityList = imageCrudRepository.findByReferenceIdAndReferenceTable(tripId, ImageEnum.TRIP.getCode());
+        List<ImageEntity> imageEntityList = imageRepository.findByReferenceIdAndReferenceTable(tripId, ImageReferenceTableEnum.TRIP.getCode());
 
         return imageEntityList.isEmpty()
                 ? Collections.emptyList()

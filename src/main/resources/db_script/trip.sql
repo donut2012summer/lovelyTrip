@@ -1,3 +1,5 @@
+
+-- name: searchTrips
 SELECT DISTINCT ON (trip.id)
     trip.id,
     trip.title,
@@ -22,3 +24,4 @@ WHERE 1 = 1
 -- duration filter skipped unless needed
 ORDER BY trip.id, tourGroup.unit_price ASC
 LIMIT :size OFFSET :offset
+

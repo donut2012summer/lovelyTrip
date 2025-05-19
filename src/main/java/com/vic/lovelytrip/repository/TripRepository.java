@@ -5,6 +5,6 @@ import com.vic.lovelytrip.entity.TripEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface TripCrudRepository extends CrudRepository<TripEntity, Long> {
+public interface TripRepository extends CrudRepository<TripEntity, Long>, TripRepositoryCustom {
+
 }

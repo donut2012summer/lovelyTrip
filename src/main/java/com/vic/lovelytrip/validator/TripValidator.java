@@ -1,13 +1,11 @@
 package com.vic.lovelytrip.validator;
 
 import com.vic.lovelytrip.dto.TripCreateRequest;
-import com.vic.lovelytrip.lib.MessageCodeEnum;
-import com.vic.lovelytrip.lib.MessageInfoContainer;
-import com.vic.lovelytrip.lib.PatternEnum;
+import com.vic.lovelytrip.common.message.MessageCodeEnum;
+import com.vic.lovelytrip.common.message.MessageInfoContainer;
+import com.vic.lovelytrip.common.enums.PatternEnum;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-
-import java.util.Collections;
 
 @Component
 public class TripValidator extends BaseValidator {

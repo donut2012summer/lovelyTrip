@@ -1,8 +1,8 @@
 package com.vic.lovelytrip.validator;
 
 
-import com.vic.lovelytrip.lib.MessageCodeEnum;
-import com.vic.lovelytrip.lib.MessageInfoContainer;
+import com.vic.lovelytrip.common.message.MessageCodeEnum;
+import com.vic.lovelytrip.common.message.MessageInfoContainer;
 import com.vic.lovelytrip.repository.LocationCrudRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

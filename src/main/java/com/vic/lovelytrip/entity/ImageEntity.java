@@ -10,5 +10,7 @@ public class ImageEntity extends BaseEntity {
     private long referenceId;
     private String imageUrl;
     private String imageZone;
+    private String storedFilename;
     private int displayOrder;
+    private int status;
 }

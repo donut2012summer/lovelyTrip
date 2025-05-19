@@ -1,19 +1,16 @@
 package com.vic.lovelytrip.validator;
 
 import com.vic.lovelytrip.TestDataFactory;
-import com.vic.lovelytrip.dto.ImageCreateRequest;
 import com.vic.lovelytrip.dto.TripCreateRequest;
-import com.vic.lovelytrip.lib.MessageCodeEnum;
-import com.vic.lovelytrip.lib.MessageInfo;
-import com.vic.lovelytrip.lib.MessageInfoContainer;
+import com.vic.lovelytrip.common.message.MessageCodeEnum;
+import com.vic.lovelytrip.common.message.MessageInfo;
+import com.vic.lovelytrip.common.message.MessageInfoContainer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

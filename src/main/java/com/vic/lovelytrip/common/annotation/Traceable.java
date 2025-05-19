@@ -1,4 +1,4 @@
-package com.vic.lovelytrip.lib;
+package com.vic.lovelytrip.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

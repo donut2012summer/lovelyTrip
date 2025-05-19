@@ -35,6 +35,7 @@ public class TourGroupMapper {
 
         for(TourGroupEntity tourGroupEntity : tourGroupEntityList){
             TourGroupDetail tourGroupDetail = mapToTourGroupDetail(tourGroupEntity);
+            tourGroupDetailList.add(tourGroupDetail);
         }
         return tourGroupDetailList;
     }

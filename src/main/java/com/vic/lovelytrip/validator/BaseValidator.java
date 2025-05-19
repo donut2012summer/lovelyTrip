@@ -1,10 +1,8 @@
 package com.vic.lovelytrip.validator;
 
-import com.vic.lovelytrip.entity.BaseEntity;
-import com.vic.lovelytrip.lib.HttpStatusEnum;
-import com.vic.lovelytrip.lib.MessageInfoContainer;
-import com.vic.lovelytrip.lib.MessageCodeEnum;
-import com.vic.lovelytrip.lib.PatternEnum;
+import com.vic.lovelytrip.common.message.MessageInfoContainer;
+import com.vic.lovelytrip.common.message.MessageCodeEnum;
+import com.vic.lovelytrip.common.enums.PatternEnum;
 import lombok.Getter;
 
 import java.util.Objects;
@@ -30,7 +28,6 @@ public abstract class BaseValidator {
         }
         return false;
     }
-
 
     /**
      * Check format of target string with the PatternEnum, add message if they do not match
@@ -73,7 +70,5 @@ public abstract class BaseValidator {
         String stringValue = Objects.nonNull(value) ? String.valueOf(value) : "";
         return stringValue.isBlank();
     }
-
-
 
 }

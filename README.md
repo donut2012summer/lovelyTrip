@@ -27,33 +27,60 @@ LovelyTrip is a Spring Boot backend project demonstrating clean architecture and
 
 ## 👉🏻 API Endpoints Overview
 
-| Module     | Method   | Endpoint                         | Description                        | Status          |
-|------------|----------|----------------------------------|------------------------------------|-----------------|
-| Trip       | GET      | `/trips/search?query=`           | Keyword-based trip search          | ✅ Completed     |
-| Trip       | GET      | `/trips/advanced-search`         | Advanced filters, pagination, etc. | 🛠️ In Progress |
-| Trip       | GET      | `/trips/{id}?includeTourGroups=` | Retrieve one trip by ID            | ✅ Completed     |
-| Trip       | POST     | `/trips`                         | Create a new trip                  | ✅ Completed     |
-| Trip       | PUT      | `/trips/{id}`                    | Update an existing trip            | 🕐 Planned      |
-| Trip       | DELETE   | `/trips/{id}`                    | Soft-delete a trip                 | 🕐 Planned      |
-| Tour Group | GET      | `/api/trips/{tripId}/groups`     | List groups under a trip           | 🕐 Planned      |
-| Tour Group | GET      | `/api/groups/{groupId}`          | Get group schedule and pricing     | 🕐 Planned      |
-| Tour Group | POST     | `/api/trips/{tripId}/groups`     | Add a tour group                   | 🕐 Planned      |
-| Tour Group | PUT      | `/api/groups/{groupId}`          | Update a tour group                | 🕐 Planned      |
-| Tour Group | DELETE   | `/api/groups/{groupId}`          | Remove/cancel a group              | 🕐 Planned      |
-| Booking    | POST     | `/api/bookings`                  | Book a tour group                  | 🕐 Planned      |
-| Booking    | GET      | `/api/bookings/{id}`             | View a specific booking            | 🕐 Planned      |
-| Booking    | GET      | `/api/users/{id}/bookings`       | List bookings by user              | 🕐 Planned      |
-| Booking    | PUT      | `/api/bookings/{id}/cancel`      | Cancel a booking                   | 🕐 Planned      |
-| Image      | POST     | `/api/images`                    | Upload image                       | 🕐 Planned      |
-| Image      | GET      | `/api/images/{id}`               | Retrieve image                     | 🕐 Planned      |
-| Image      | DELETE   | `/api/images/{id}`               | Delete image                       | 🕐 Planned      |
-| Auth       | POST     | `/api/auth/register`             | Register user/supplier             | 🕐 Planned      |
-| Auth       | POST     | `/api/auth/login`                | Login and receive token            | 🕐 Planned      |
-| User       | GET      | `/api/users/me`                  | Get current user profile           | 🕐 Planned      |
-| User       | PUT      | `/api/users/me`                  | Update profile                     | 🕐 Planned      |
-| Review     | POST     | `/api/trips/{id}/reviews`        | Submit a review                    | 🕐 Planned      |
-| Review     | GET      | `/api/trips/{id}/reviews`        | List all reviews for a trip        | 🕐 Planned      |
+| Module     | Method   | Endpoint                         | Description                                                                | Status             |
+|------------|----------|----------------------------------|----------------------------------------------------------------------------|--------------------|
+| Trip       | GET      | `/trips/?query=`                 | Handles normal search, advanced filters, or returns all trips if no params | Planned            |
+| Trip       | GET      | `/trips/{id}?includeTourGroups=` | Retrieve one trip by ID                                                    | Completed          |
+| Trip       | POST     | `/trips`                         | Create a new trip                                                          | Completed          |
+| Trip       | PUT      | `/trips/{id}`                    | Update an existing trip                                                    | Planned            |
+| Trip       | DELETE   | `/trips/{id}`                    | Soft-delete a trip                                                         | Planned            |
+| Tour Group | GET      | `/api/trips/{tripId}/groups`     | List groups under a trip                                                   | Planned            |
+| Tour Group | GET      | `/api/groups/{groupId}`          | Get group schedule and pricing                                             | Planned            |
+| Tour Group | POST     | `/api/trips/{tripId}/groups`     | Add a tour group                                                           | Planned            |
+| Tour Group | PUT      | `/api/groups/{groupId}`          | Update a tour group                                                        | Planned            |
+| Tour Group | DELETE   | `/api/groups/{groupId}`          | Remove/cancel a group                                                      | Planned            |
+| Booking    | POST     | `/api/bookings`                  | Book a tour group                                                          | Planned            |
+| Booking    | GET      | `/api/bookings/{id}`             | View a specific booking                                                    | Planned            |
+| Booking    | GET      | `/api/users/{id}/bookings`       | List bookings by user                                                      | Planned            |
+| Booking    | PUT      | `/api/bookings/{id}/cancel`      | Cancel a booking                                                           | Planned            |
+| Image      | POST     | `/api/images`                    | Upload image and return image url                                          | 👉🏻 In progress   |
+| Image      | GET      | `/api/images/{id}`               | Retrieve image                                                             | Planned            |
+| Image      | DELETE   | `/api/images/{id}`               | Delete image                                                               | Planned            |
+| Auth       | POST     | `/api/auth/register`             | Register user/supplier                                                     | Planned            |
+| Auth       | POST     | `/api/auth/login`                | Login and receive token                                                    | Planned            |
+| User       | GET      | `/api/users/me`                  | Get current user profile                                                   | Planned            |
+| User       | PUT      | `/api/users/me`                  | Update profile                                                             | Planned            |
+| Review     | POST     | `/api/trips/{id}/reviews`        | Submit a review                                                            | Planned            |
+| Review     | GET      | `/api/trips/{id}/reviews`        | List all reviews for a trip                                                | Planned            |
 
+
+
+| Module     | Method | Endpoint                         | Description                                                                | Status           | Returns                            |
+|------------|--------|----------------------------------|----------------------------------------------------------------------------|------------------|------------------------------------|
+| Trip       | GET    | `/trips?query=`                  | Handles normal search, advanced filters, or returns all trips if no params | Planned          | `List<TripResponse>`               |
+| Trip       | GET    | `/trips/{id}?includeTourGroups=` | Retrieve one trip by ID                                                    | Completed        | `TripResponse`                     |
+| Trip       | POST   | `/trips`                         | Create a new trip                                                          | Completed        | `TripResponse` (created)           |
+| Trip       | PUT    | `/trips/{id}`                    | Update an existing trip                                                    | Planned          | `TripResponse` (updated)           |
+| Trip       | DELETE | `/trips/{id}`                    | Soft-delete a trip                                                         | Planned          | `204 No Content`                   |
+| Tour Group | GET    | `/api/trips/{tripId}/groups`     | List groups under a trip                                                   | Planned          | `List<TourGroupResponse>`          |
+| Tour Group | GET    | `/api/groups/{groupId}`          | Get group schedule and pricing                                             | Planned          | `TourGroupResponse`                |
+| Tour Group | POST   | `/api/trips/{tripId}/groups`     | Add a tour group                                                           | Planned          | `TourGroupResponse` (created)      |
+| Tour Group | PUT    | `/api/groups/{groupId}`          | Update a tour group                                                        | Planned          | `TourGroupResponse` (updated)      |
+| Tour Group | DELETE | `/api/groups/{groupId}`          | Remove/cancel a group                                                      | Planned          | `204 No Content`                   |
+| Booking    | POST   | `/api/bookings`                  | Book a tour group                                                          | Planned          | `BookingResponse` (created)        |
+| Booking    | GET    | `/api/bookings/{id}`             | View a specific booking                                                    | Planned          | `BookingResponse`                  |
+| Booking    | GET    | `/api/users/{id}/bookings`       | List bookings by user                                                      | Planned          | `List<BookingResponse>`            |
+| Booking    | PUT    | `/api/bookings/{id}/cancel`      | Cancel a booking                                                           | Planned          | `BookingResponse` (updated status) |
+| Image      | POST   | `/api/images`                    | Upload image and return image url                                          | Planned          | `URL`                              |
+| Image      | GET    | `/api/images`                    | Get preSignedS3url                                                         | 👉🏻 In progress | `ImageUploadResponse (imageUrl)`   |
+| Image      | GET    | `/api/images/{id}`               | Retrieve image                                                             | Planned          | `ImageResponse (binary or URL)`    |
+| Image      | DELETE | `/api/images/{id}`               | Delete image                                                               | Planned          | `204 No Content`                   |
+| Auth       | POST   | `/api/auth/register`             | Register user/supplier                                                     | Planned          | `AuthResponse (user, token)`       |
+| Auth       | POST   | `/api/auth/login`                | Login and receive token                                                    | Planned          | `AuthResponse (user, token)`       |
+| User       | GET    | `/api/users/me`                  | Get current user profile                                                   | Planned          | `UserProfileResponse`              |
+| User       | PUT    | `/api/users/me`                  | Update profile                                                             | Planned          | `UserProfileResponse (updated)`    |
+| Review     | POST   | `/api/trips/{id}/reviews`        | Submit a review                                                            | Planned          | `ReviewResponse (created)`         |
+| Review     | GET    | `/api/trips/{id}/reviews`        | List all reviews for a trip                                                | Planned          | `List<ReviewResponse>`             |
 
 
 

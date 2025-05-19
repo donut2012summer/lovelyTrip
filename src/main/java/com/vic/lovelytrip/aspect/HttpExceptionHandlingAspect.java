@@ -1,8 +1,8 @@
 package com.vic.lovelytrip.aspect;
 
 import com.vic.lovelytrip.dto.restservice.RestServiceResponse;
-import com.vic.lovelytrip.lib.BusinessException;
-import com.vic.lovelytrip.lib.HttpStatusEnum;
+import com.vic.lovelytrip.common.exception.BusinessException;
+import com.vic.lovelytrip.common.enums.HttpStatusEnum;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -30,7 +30,10 @@ public class HttpExceptionHandlingAspect {
             return proceedingJoinPoint.proceed(); // throw Throwable
 
         }catch (BusinessException businessException) {
-            logger.warn("Business Exception in {}: {}", proceedingJoinPoint.getSignature().getName(), businessException.getMessage());
+            String clazzName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+            String methodName = proceedingJoinPoint.getSignature().getName();
+
+            logger.warn("[Exception] Business Exception in {}.{}: {}", clazzName,methodName, businessException.getMessage());
 
             return generateErrorRestResponse(
                       businessException.getHttpStatusEnum().getStatusCode()
@@ -40,7 +43,10 @@ public class HttpExceptionHandlingAspect {
 
         }catch (Exception exception) {
 
-            logger.error("Unexpected exception in {}: {}", proceedingJoinPoint.getSignature().getName(), exception.getMessage());
+            String clazzName = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+            String methodName = proceedingJoinPoint.getSignature().getName();
+
+            logger.error("[Exception] Unexpected exception in {}.{}: {}", clazzName, methodName, exception.getMessage());
 
             return generateErrorRestResponse(
                       HttpStatusEnum.INTERNAL_SERVER_ERROR.getStatusCode()

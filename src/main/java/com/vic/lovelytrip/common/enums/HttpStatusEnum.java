@@ -1,9 +1,9 @@
-package com.vic.lovelytrip.lib;
+package com.vic.lovelytrip.common.enums;
 
 public enum HttpStatusEnum {
 
     // 2xx Success
-    OK("200", "OK"),
+    OK("200", "Success"),
 
     // 4xx Client Errors
     BAD_REQUEST("400", "Bad Request"),

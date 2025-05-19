@@ -1,10 +1,11 @@
-package com.vic.lovelytrip.repository;
+package com.vic.lovelytrip.repository.impl;
 
+import com.vic.lovelytrip.common.util.SqlLoader;
 import com.vic.lovelytrip.dto.TripSearchRequest;
 import com.vic.lovelytrip.dto.TripSearchResponse;
-import com.vic.lovelytrip.lib.SqlLoader;
 import com.vic.lovelytrip.mapper.rowmapper.TripSearchResponseRowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import com.vic.lovelytrip.repository.TripRepositoryCustom;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -12,20 +13,26 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class TripQueryRepository {
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final SqlLoader sqlLoader;
-    private final String querySql;
+public class TripRepositoryImpl implements TripRepositoryCustom {
 
-    public TripQueryRepository(NamedParameterJdbcTemplate jdbcTemplate, SqlLoader sqlLoader) throws Exception{
+    private final JdbcTemplate jdbcTemplate;
+
+    private final SqlLoader sqlLoader;
+
+    private final String FILE_NAME = "trip";
+
+    public TripRepositoryImpl(JdbcTemplate jdbcTemplate, SqlLoader sqlLoader) {
         this.jdbcTemplate = jdbcTemplate;
         this.sqlLoader = sqlLoader;
-        this.querySql = sqlLoader.load("db_script/trip_search.sql");
     }
 
+    @Override
     public List<TripSearchResponse> searchTrips(TripSearchRequest request) {
 
+        final String QUERY_NAME = "searchTrips";
+
         Map<String, Object> params = new HashMap<>();
+
         params.put("keyword", request.getKeyword());
         params.put("destinationId", request.getDestinationId());
         params.put("priceMin", request.getPriceMin());
@@ -33,8 +40,10 @@ public class TripQueryRepository {
         params.put("offset", request.getPage() * request.getSize());
         params.put("size", request.getSize());
 
-        return jdbcTemplate.query(querySql, params, new TripSearchResponseRowMapper());
+        String sql = sqlLoader.getQuery(FILE_NAME, QUERY_NAME)
+                .orElseThrow(() -> new IllegalStateException("Required SQL query" + QUERY_NAME + "not found in" + FILE_NAME + ".sql"));
+
+
+        return jdbcTemplate.query(sql, new TripSearchResponseRowMapper(), params);
     }
-
-
 }

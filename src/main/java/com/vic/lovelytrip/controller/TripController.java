@@ -3,6 +3,7 @@ package com.vic.lovelytrip.controller;
 import com.vic.lovelytrip.dto.*;
 import com.vic.lovelytrip.dto.restservice.RestServiceRequest;
 import com.vic.lovelytrip.dto.restservice.RestServiceResponse;
+import com.vic.lovelytrip.common.enums.HttpStatusEnum;
 import com.vic.lovelytrip.mapper.TripMapper;
 import com.vic.lovelytrip.service.TripService;
 
@@ -67,6 +68,9 @@ public class TripController {
     private <T> RestServiceResponse<T> toResponse(T responseData) {
 
         RestServiceResponse<T> response = new RestServiceResponse<>();
+        response.setResponseCode(HttpStatusEnum.OK.getStatusCode());
+        response.setResponseDescription(HttpStatusEnum.OK.getStatusMessage());
+
         response.setResponseBody(responseData);
 
         return response;
