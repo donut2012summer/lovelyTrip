@@ -31,7 +31,7 @@ jobs:
           fi
 
       - name: Debug ssh-keyscan
-        run: ssh-keyscan -v -H 192.168.64.2
+        run: ssh-keyscan -v -H ${{ secrets.VM_HOST }}
 
       - name: Set up SSH key
         run: |
