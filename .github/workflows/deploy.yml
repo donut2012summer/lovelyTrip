@@ -21,8 +21,17 @@ jobs:
       - name: Build JAR
         run: mvn clean package -DskipTests
 
-      - name: debug
-        run: echo "SSH_HOST=${{ secrets.SSH_HOST }}"
+      - name: Check SSH_HOST value
+        run: |
+          if [ -z "${{ secrets.SSH_HOST }}" ]; then
+            echo "❌ SSH_HOST is empty"
+            exit 1
+          else
+            echo "✅ SSH_HOST=${{ secrets.SSH_HOST }}"
+          fi
+
+      - name: Debug ssh-keyscan
+        run: ssh-keyscan -v -H ${{ secrets.SSH_HOST }}
 
       - name: Set up SSH key
         run: |
