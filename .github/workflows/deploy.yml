@@ -21,6 +21,9 @@ jobs:
       - name: Build JAR
         run: mvn clean package -DskipTests
 
+      - name: debug
+        run: echo "SSH_HOST=${{ secrets.SSH_HOST }}"
+
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
