@@ -21,33 +21,33 @@ jobs:
       - name: Build JAR
         run: mvn clean package -DskipTests
 
-      - name: Check SSH_HOST value
+      - name: Check VM_HOST value
         run: |
-          if [ -z "${{ secrets.SSH_HOST }}" ]; then
-            echo "❌ SSH_HOST is empty"
+          if [ -z "${{ secrets.VM_HOST }}" ]; then
+            echo "❌ VM_HOST is empty"
             exit 1
           else
-            echo "✅ SSH_HOST=${{ secrets.SSH_HOST }}"
+            echo "✅ VM_HOST=${{ secrets.VM_HOST }}"
           fi
 
       - name: Debug ssh-keyscan
-        run: ssh-keyscan -v -H ${{ secrets.SSH_HOST }}
+        run: ssh-keyscan -v -H ${{ secrets.VM_HOST }}
 
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
 
       - name: Upload JAR and Dockerfile to VM
         run: |
           scp target/lovelyTrip-0.0.1-SNAPSHOT.jar Dockerfile \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/lovelyTrip/
+            ${{ secrets.SSH_USER }}@${{ secrets.VM_HOST }}:/home/${{ secrets.SSH_USER }}/lovelyTrip/
 
       - name: Deploy on VM via SSH
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.VM_HOST }} << 'EOF'
             set -e
 
             cd ~/lovelyTrip
