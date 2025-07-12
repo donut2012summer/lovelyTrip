@@ -1,11 +1,11 @@
 name: Deploy lovelyTrip to VM
 
 on:
-  workflow_dispatch:  # 手動觸發
+  workflow_dispatch:  # manual dispatch
 
 jobs:
   deploy:
-    if: github.actor == 'donut2012summer'  # 限定觸發者
+    if: github.actor == 'donut2012summer'
     runs-on: ubuntu-latest
 
     steps:
@@ -24,18 +24,18 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VM_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Upload JAR and Dockerfile to VM
         run: |
           scp target/lovelyTrip-0.0.1-SNAPSHOT.jar Dockerfile \
-            ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/home/${{ secrets.VM_USER }}/lovelyTrip/
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/lovelyTrip/
 
       - name: Deploy on VM via SSH
         run: |
-          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             set -e
 
             cd ~/lovelyTrip
